@@ -3,6 +3,7 @@
 # Our hero actors are represented by this class
 class Hero
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots
+  attr_reader :name, :health_points
 
   def initialize(name)
     @name           = name
@@ -28,5 +29,9 @@ class Hero
 
   def armor
     @helmet+@gloves+@breastplate+@trousers+@boots
+  end
+
+  def to_s
+    "Hero #{@name}\n  Health: #{@health_points}\n  Armor: #{armor}\n"
   end
 end
