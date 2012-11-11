@@ -16,7 +16,8 @@ class Hero
   end
 
   def hit(damage)
-    @health_points -= damage
+    damage -= armor
+    @health_points -= damage if damage > 0
   end
   
   def health_points
