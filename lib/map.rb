@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'set'
+require 'yaml'
 
 class Map
   Position = Struct.new(:x, :y) do
@@ -9,16 +10,18 @@ class Map
     end
   end
 
-  Water       = ["\e[38;5;18;48;5;27m%s\e[0m",    '≈']
-  Grass       = ["\e[38;5;149;48;5;118m%s\e[0m",  '∴']
-  Forrest     = ["\e[38;5;100;48;5;28m%s\e[0m",   '∴']
-  StoneWall   = ["\e[38;5;236;48;5;241m%s\e[0m",  '∴']
-  StoneFloor  = ["\e[38;5;248;48;5;253m%s\e[0m",  '⁙']
+  Water       = ["\e[38;5;18;48;5;27m%s\e[0m",    ' '] # ≈
+  Grass       = ["\e[38;5;149;48;5;118m%s\e[0m",  ' '] # ∴
+  Forrest     = ["\e[38;5;100;48;5;28m%s\e[0m",   ' '] # ∴
+  StoneWall   = ["\e[38;5;236;48;5;241m%s\e[0m",  ' '] # ∴
+  StoneFloor  = ["\e[38;5;248;48;5;253m%s\e[0m",  ' '] # ⁙
+  WoodFloor   = ["\e[38;5;248;48;5;214m%s\e[0m",  ' '] # |, =
   Player      = ["\e[38;5;124;48;5;124m%s\e[0m",  ' ']
 
   Parse = {
     'x'.ord => :forrest,
     '.'.ord => :grass,
+    '='.ord => :wood_floor,
     '#'.ord => :stone_wall,
     ' '.ord => :stone_floor,
     '~'.ord => :water,
@@ -28,28 +31,31 @@ class Map
     grass:        Grass,
     stone_wall:   StoneWall,
     stone_floor:  StoneFloor,
+    wood_floor:   WoodFloor,
     water:        Water,
     player:       Player # 253
   }
-  Walkable = [:grass, :stone_floor].to_set
+  Walkable = [:wood_floor, :grass, :stone_floor].to_set
 
   def self.read_file(file)
-    lines       = File.readlines(file)
-    meta        = lines.shift
-    position    = Position.new(*meta.match(/^start:(\d+),(\d+)/).captures.map(&:to_i))
+    lines       = File.readlines(file+'.txt')
+    meta        = YAML.load_file(file+'.yaml')
     new(lines.map { |line|
       line.chomp.unpack("C*").map { |chr|
         Parse[chr] || raise("Unknown char: #{chr.inspect}")
       }
-    }, position)
+    }, meta)
   end
 
-  attr_reader :tiles, :height, :width, :player_position
+  attr_reader :tiles, :height, :width, :player_position, :enemies, :enemy_probability
 
-  def initialize(map, player_position)
-    @tiles            = map
-    @player_position  = player_position
-    @width, @height   = @tiles.first.size, @tiles.size
+  def initialize(tiles, meta)
+    @tiles              = tiles
+    @meta               = meta
+    @player_position    = Position.new(*meta['start'])
+    @width, @height     = @tiles.first.size, @tiles.size
+    @enemy_probability  = meta['enemy_probability']
+    @enemies            = meta['enemies']
   end
 
   def move_up
