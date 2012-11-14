@@ -10,7 +10,7 @@ module Screens
     end
 
     def rendered
-      hero_stats(@hero)+map_slice+help
+      hero_stats(@hero)+map_slice+"\n"+help
     end
 
     def map_slice

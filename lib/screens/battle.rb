@@ -25,7 +25,7 @@ module Screens
       fill  = LogSize-log.size
       log.concat(['']*fill) if fill > 0
 
-      log.map { |line| "\e[38;5;0;48;5;15m"+ljust(line) }.join
+      log.map { |line| "\e[38;5;#{Black};48;5;#{White}m"+ljust(line) }.join
     end
 
     def battle_help

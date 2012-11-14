@@ -7,4 +7,5 @@ Game.rows, Game.columns = $stdin.winsize
 trap("SIGWINCH") do
   Game.rows, Game.columns = $stdin.winsize
 end
+Game.warning_screensize if Game.screen_too_small?
 Game.run

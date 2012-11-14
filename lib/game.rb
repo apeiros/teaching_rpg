@@ -18,10 +18,23 @@ class Game
     game.run
   end
 
-  attr_reader :scene, :hero, :map, :shop, :enemy
+  def self.warning_screensize
+    puts "#{Screen::ClearScreen}WARNING",
+         "Your screen seems to small",
+         "The game needs 120 cols and 40 rows at least",
+         "Please resize your terminal emulation accordingly.",
+         "Current size: #{Game.columns} x #{Game.rows}"
+    exit 1
+  end
+
+  def self.screen_too_small?
+    rows < 40 || columns < 120
+  end
+
+  attr_reader :scenes, :hero, :map, :shop, :enemy
 
   def initialize
-    @scene  = []
+    @scenes = []
     @map    = nil
     @hero   = Hero.new('Aldaran')
     @enemy  = nil
