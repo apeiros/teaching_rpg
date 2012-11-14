@@ -3,4 +3,8 @@
 
 require 'game'
 
+Game.rows, Game.columns = $stdin.winsize
+trap("SIGWINCH") do
+  Game.rows, Game.columns = $stdin.winsize
+end
 Game.run

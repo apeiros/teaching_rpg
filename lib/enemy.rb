@@ -11,6 +11,9 @@ class Enemy
   def alive?
     @health_points > 0
   end
+  def dead?
+    !alive?
+  end
 
   def take_physical_damage(damage)
     damage -= armor

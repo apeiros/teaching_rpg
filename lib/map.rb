@@ -75,9 +75,11 @@ class Map
     Walkable.include?(@tiles[y][x])
   end
 
-  def rendered
-    @tiles.map.with_index { |row, y|
-      row.map.with_index { |cell, x|
+  def slice(x, y, width, height)
+    y.upto(y+height-1).map { |y|
+      row = @tiles.at(y)
+      x.upto(x+width-1).map { |x|
+        cell = row.at(x)
         cell = :player if (x == @player_position.x && y == @player_position.y)
         format, char = Render[cell]
         format % char

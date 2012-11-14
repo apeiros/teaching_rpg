@@ -4,7 +4,7 @@
 class Hero
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
   attr_accessor :sword
-  attr_reader :name, :health_points
+  attr_reader :name, :health_points, :gold
 
   def initialize(name)
     @name           = name
@@ -16,6 +16,7 @@ class Hero
     @trousers       = 0
     @boots          = 0
     @shield         = 1
+    @gold           = 100
   end
 
   def attack
@@ -30,17 +31,20 @@ class Hero
 
     damage
   end
-  
+
   def health_points
     @health_points
   end
-  
+
   def magic_points
     0
   end
 
   def alive?
     @health_points > 0
+  end
+  def dead?
+    !alive?
   end
 
   def armor
