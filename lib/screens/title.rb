@@ -7,10 +7,10 @@ module Screens
     def rendered
       ljust("", Black)+
       ljust("", White)+
-      center("WELCOME", White)+
-      center("To The Ruby RPG", White)+
+      center("#{FgBlack}WELCOME", White)+
+      center("#{FgBlack}To The Ruby RPG", White)+
       ljust("", White)+
-      center("Press SPACE to start a new game", White)+
+      center("#{FgBlack}Press SPACE to start a new game", White)+
       ljust("", White)*(screen_height-7)+
       help
     end

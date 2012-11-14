@@ -18,6 +18,24 @@ class Screen
   Cyan    = 51
   Violet  = 201
 
+  FgBlack   = "\e[38;5;16m"
+  FgWhite   = "\e[38;5;231m"
+  FgRed     = "\e[38;5;196m"
+  FgGreen   = "\e[38;5;46m"
+  FgBlue    = "\e[38;5;21m"
+  FgYellow  = "\e[38;5;226m"
+  FgCyan    = "\e[38;5;51m"
+  FgViolet  = "\e[38;5;201m"
+
+  BgBlack   = "\e[48;5;16m"
+  BgWhite   = "\e[48;5;231m"
+  BgRed     = "\e[48;5;196m"
+  BgGreen   = "\e[48;5;46m"
+  BgBlue    = "\e[48;5;21m"
+  BgYellow  = "\e[48;5;226m"
+  BgCyan    = "\e[48;5;51m"
+  BgViolet  = "\e[48;5;201m"
+
   def screen_height
     ScreenHeight
   end

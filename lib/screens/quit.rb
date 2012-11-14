@@ -9,7 +9,7 @@ module Screens
       ljust("", White)+
       ljust("", White)+
       ljust("", White)+
-      center("GOOD BYE", White)+
+      center("#{FgBlack}GOOD BYE", White)+
       ljust("", White)*(screen_height-6)+
       ljust("", Black)
     end
