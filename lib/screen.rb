@@ -93,6 +93,14 @@ class Screen
     "#{background}#{lpadding}#{text}#{background}#{rpadding}#{reset}\n"
   end
 
+  def scroll(ary, height, width, position, background=White)
+    ary  = ary[position, height]
+    fill = height - ary.length
+    ary.concat([ljust('', background)]*fill) if fill > 0
+
+    ary.join
+  end
+
   def char_count(text)
     text.gsub(/\e\[[^m]*m/, '').length
   end

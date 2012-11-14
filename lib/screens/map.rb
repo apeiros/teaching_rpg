@@ -21,8 +21,9 @@ module Screens
       key_map_help(
         'W'  => 'Up',
         'A'  => 'Left',
-        'S'  => 'Right',
-        'D'  => 'Down',
+        'S'  => 'Down',
+        'D'  => 'Right',
+        'I'  => 'Use Item',
         'Q'  => 'Quit'
       )
     end

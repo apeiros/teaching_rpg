@@ -17,7 +17,12 @@ module Scenes
                    'a' => :move_left,
                    's' => :move_down,
                    'd' => :move_right,
+                   'i' => :use_item,
                    'q' => :quit
+    end
+
+    def use_item
+      Scenes::SelectItem.run(@game)
     end
 
     def move_left
