@@ -17,7 +17,7 @@ module Scenes
                    'a' => :move_left,
                    's' => :move_down,
                    'd' => :move_right,
-                   'q' => :exit
+                   'q' => :quit
     end
 
     def move_left

@@ -19,10 +19,11 @@ module Scenes
       if @retreated
         restaff_enemy
       elsif @enemy.alive?
-        @screen.report "#{@enemy.name} you died. Game over. Press space to continue."
+        @screen.report "#{@enemy.name} has killed you. Game over"
       else
-        @screen.report "#{@enemy.name} died. Congratulations, you win! Press space to continue."
+        @screen.report "#{@enemy.name} died. Congratulations, you win!"
       end
+      @screen.report("Press space to continue")
       @screen.draw
       get_space
     end
@@ -33,10 +34,10 @@ module Scenes
                    'r' => :retreat,
                    'b' => :block,
                    'i' => :use_item,
-                   'q' => :exit
+                   'q' => :quit
 
       @exit = @exit || @game.hero.dead? || @enemy.dead?
-      unless @retreated || @enemy.dead?
+      unless @exit || @retreated || @enemy.dead?
         @screen.draw
         sleep 0.5
         damage_dealt = @game.hero.take_physical_damage @enemy.attack
@@ -52,7 +53,8 @@ module Scenes
     def retreat
       if rand < 0.35
         @screen.report "You successfully retreated"
-        @retreated = true
+        @retreated  = true
+        @exit       = true
       else
         @screen.report "You tried to retreat, but failed"
       end
@@ -66,10 +68,10 @@ module Scenes
     end
 
     def restaff_enemy
-      if Enemies[@enemy.name]
-        Enemies[@enemy.name] += 1
+      if @map.enemies[@enemy.name]
+        @map.enemies[@enemy.name] += 1
       else
-        Enemies[@enemy.name] = 1
+        @map.enemies[@enemy.name] = 1
       end
     end
   end

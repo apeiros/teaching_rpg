@@ -28,8 +28,10 @@ class Game
   end
 
   def run
-    setup_screen do
-      Scenes::Title.run(self)
+    catch(:quit) do
+      setup_screen do
+        Scenes::Title.run(self)
+      end
     end
     quit = Screens::Quit.new
     quit.draw

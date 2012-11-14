@@ -23,7 +23,7 @@ module Screens
         'A'  => 'Left',
         'S'  => 'Right',
         'D'  => 'Down',
-        'Q'  => 'Exit'
+        'Q'  => 'Quit'
       )
     end
   end

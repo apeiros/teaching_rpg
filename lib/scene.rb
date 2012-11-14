@@ -20,6 +20,10 @@ class Scene
     @exit = true
   end
 
+  def quit
+    throw(:quit)
+  end
+
   def expect_input(action_map)
     begin
       input = $stdin.getch

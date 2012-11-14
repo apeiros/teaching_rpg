@@ -34,7 +34,7 @@ module Screens
         'B' => 'Block',
         'I' => 'Use Item',
         'R' => 'Retreat',
-        'Q' => 'Exit'
+        'Q' => 'Quit'
       )
     end
   end
