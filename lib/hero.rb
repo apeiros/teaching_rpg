@@ -5,7 +5,7 @@ require 'items'
 # Our hero actors are represented by this class
 class Hero
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
-  attr_accessor :sword
+  attr_accessor :sword, :blocking
   attr_reader :name, :health_points, :gold, :backpack
 
   def initialize(name)
@@ -20,6 +20,7 @@ class Hero
     @boots              = 0
     @shield             = 1
     @gold               = 100
+    @blocking           = false
     @backpack           = Items.new(
       Items::HealingItem.new('Apple',   20) => 10,
       Items::HealingItem.new('Potion', 100) =>  2
@@ -34,6 +35,7 @@ class Hero
   end
 
   def take_physical_damage(damage)
+    armor   = @blocking ? (5+3*armor()) : armor()
     damage -= armor
     damage  = 0 if damage < 0
     @health_points -= damage

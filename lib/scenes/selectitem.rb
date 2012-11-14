@@ -5,6 +5,8 @@ require 'scene'
 module Scenes
   class SelectItem < Scene
 
+    attr_reader :action
+
     def initialize(*)
       super
       @screen = Screens::Items.new(@game.hero)
@@ -33,6 +35,7 @@ module Scenes
       item, amount = @game.hero.backpack.to_a[@screen.selected]
       @game.hero.backpack.remove(item)
       item.apply(@game.hero)
+      @action = item.action
 
       exit
     end

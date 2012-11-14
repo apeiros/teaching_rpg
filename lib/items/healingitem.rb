@@ -11,6 +11,7 @@ class Items
 
     def apply(entity)
       entity.heal(@amount)
+      @action = "Healed #{entity.name} for #{@amount} health points"
     end
   end
 end

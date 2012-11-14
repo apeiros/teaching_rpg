@@ -15,7 +15,7 @@ module Screens
     end
 
     def terminate
-      sleep 1
+      sleep 0.7
       print ResetColor+ResetCursor+ClearScreen
       flush
     end

@@ -28,26 +28,45 @@ module Scenes
       get_space
     end
 
+    def use_item
+      scene = Scenes::SelectItem.run(@game)
+      if scene.action
+        @screen.report scene.action
+        true
+      else
+        false
+      end
+    end
+
     def main
       @screen.draw
-      expect_input 'a' => :attack,
-                   'r' => :retreat,
-                   'b' => :block,
-                   'i' => :use_item,
-                   'q' => :quit
-
+      @game.hero.blocking = false
+      begin
+        result = expect_input 'a' => :attack,
+                              'r' => :retreat,
+                              'b' => :block,
+                              'i' => :use_item,
+                              'q' => :quit
+      end until result || @exit
       @exit = @exit || @game.hero.dead? || @enemy.dead?
       unless @exit || @retreated || @enemy.dead?
         @screen.draw
         sleep 0.5
         damage_dealt = @game.hero.take_physical_damage @enemy.attack
-        @screen.report "#{@enemy.name} attacks you and deals #{damage_dealt}"
+        @screen.report "#{@enemy.name} attacks you and deals #{damage_dealt} damage"
       end
     end
 
     def attack
       damage_dealt = @enemy.take_physical_damage @game.hero.attack
-      @screen.report "You attack #{@enemy.name} and deal #{damage_dealt}"
+      @screen.report "You attack #{@enemy.name} and deal #{damage_dealt} damage"
+      true
+    end
+
+    def block
+      @screen.report "You are assuming a defensive position"
+      @game.hero.blocking = true
+      true
     end
 
     def retreat
@@ -58,6 +77,7 @@ module Scenes
       else
         @screen.report "You tried to retreat, but failed"
       end
+      true
     end
 
     def pick_enemy
