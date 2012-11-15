@@ -9,6 +9,10 @@ module Screens
       @shop  = shop
     end
 
+    def report(event)
+      @log << event
+    end
+
     def rendered
       s=[]
       #hero_stats(@hero)
@@ -35,6 +39,14 @@ module Screens
       s << ljust("Description line 2!", Black)
       s << help
       s.join
+    end
+
+    def battle_log
+      log   = @log.last(LogSize)
+      fill  = LogSize-log.size
+      log.concat(['']*fill) if fill > 0
+
+      log.map { |line| ljust(line) }.join
     end
 
     def help
