@@ -22,7 +22,7 @@ module Scenes
     end
     
     def move_up
-      if @screen.cursor > 1 
+      if @screen.cursor > 0 
         @screen.cursor -= 1
         @screen.draw
       else 
