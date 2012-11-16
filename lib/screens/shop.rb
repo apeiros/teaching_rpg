@@ -44,9 +44,13 @@ module Screens
         itemdesc= @items[@cursorline].desc
         lineone = itemdesc.split('')[0..79]
         linetwo = itemdesc.split('')[80..159]
+        s << ljust(" "*20+"#{lineone}", Black)
+        s << ljust(" "*20+"#{linetwo}", Black)
+      else
+      s << ljust("", Black)
+      s << ljust("", Black)      
       end
-      s << ljust(" "*20+"#{lineone}", Black)
-      s << ljust(" "*20+"#{linetwo}", Black)
+      
       s << help
       s.join
     end
