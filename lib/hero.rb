@@ -48,15 +48,19 @@ class Hero
 
   def add_item(item)
     unless @backpack[item]
-      @backpack << {item => 1}    
+      @backpack[item] = 1    
     else
       @backpack[item] += 1
     end  
   end
   
   
-  def rem_item(item)
-    @backpack.delete(item)
+  def remove_item(item)
+    if @backpack[item] > 1
+        @backpack -= 1  
+    else 
+      @backpack.delete(item)
+    end
   end
   
   def regenerate
