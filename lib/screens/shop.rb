@@ -31,7 +31,7 @@ module Screens
         buffer ljust(Row % [row_color(index), item.quantity, item.type, item.name, item.price], row_color(index))
       end
       @items.size.upto(@max_items-1) do | index |
-        buffer ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
+        buffer ljust("" , row_color(index))
       end
       if @items[@cursor]
         buffer box(@items[@cursor].desc, padding: 1, height: 2, background: 220)
