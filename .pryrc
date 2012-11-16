@@ -7,3 +7,4 @@ require 'game'
 Enemies.load_all
 H = Hero.new('Alderan')
 E = Enemies.all.spawn('Wabbit')
+G = Game.new
