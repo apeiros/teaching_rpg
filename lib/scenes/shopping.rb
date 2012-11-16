@@ -22,8 +22,8 @@ module Scenes
     end
     
     def move_up
-      if @screen.cursorline > 1 
-        @screen.cursorline -= 1
+      if @screen.cursor > 1 
+        @screen.cursor -= 1
         @screen.draw
       else 
         beep
@@ -31,8 +31,8 @@ module Scenes
     end
     
     def move_down
-      if @screen.cursorline < 37
-        @screen.cursorline += 1
+      if @screen.cursor < 37
+        @screen.cursor += 1
         @screen.draw
       else 
         beep

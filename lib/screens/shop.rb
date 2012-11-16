@@ -4,28 +4,27 @@ require 'screen'
 
 module Screens
   class Shop < Screen
-    attr_accessor :cursorline
+    attr_accessor :cursor
     def initialize(hero, items)
-      @hero  = hero
-      @items  = items
-      @cursorline = 1
+      @hero       = hero
+      @items      = items
+      @cursor     = 0
     end
 
     def rendered
       s=[]
-      #hero_stats(@hero)
-      s << ljust("LiNe WhErE Hero Stats will GOOOOOoOo", Black)
-      counter = 0
-      @items.each do | item | 
-        counter += 1
-        if counter == @cursorline
-          if !counter.odd?
+      
+      s << ljust(hero_stats(@hero), Black)
+     
+      @items.each_with_index do |item, index| 
+        if index == @cursor
+          if !index.odd?
           s << ljust("\e[38;5;#{Black};48;5;#{Cyan}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", Cyan)
           else 
           s << ljust("\e[38;5;#{Black};48;5;#{White}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", White)
           end
         else       
-          if counter.odd?
+          if index.odd?
             s << ljust("\e[38;5;#{Black};48;5;#{Cyan}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", Cyan)
           else 
             s << ljust("\e[38;5;#{Black};48;5;#{White}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", White)
@@ -40,8 +39,8 @@ module Screens
         s  << ljust("\e[38;5;#{White};48;5;#{White}m "*120 , White)
         end      
       end
-      if @items[@cursorline]
-        itemdesc= @items[@cursorline].desc
+      if @items[@cursor]
+        itemdesc= @items[@cursor].desc
         if itemdesc.split('').length > 80
           lineone = itemdesc.split('')[0..79]
           linetwo = itemdesc.split('')[80..(itemdesc.split('').length-1)]
