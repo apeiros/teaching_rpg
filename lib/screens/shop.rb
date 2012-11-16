@@ -5,6 +5,9 @@ require 'screen'
 module Screens
   class Shop < Screen
     attr_accessor :cursor
+
+    Row = "\e[38;5;#{Black};48;5;%dm%5sx %-12s %-16s %5d$"
+
     def initialize(hero, items)
       @hero       = hero
       @items      = items
@@ -25,7 +28,7 @@ module Screens
     def rendered
       buffer hero_stats(@hero)
       @items.each_with_index do |item, index|
-        buffer ljust("\e[38;5;#{Black};48;5;#{row_color(index)}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", row_color(index))
+        buffer ljust(Row % [row_color(index), item.quantity, item.type, item.name, item.price], row_color(index))
       end
       @items.size.upto(@max_items-1) do | index |
         buffer ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
