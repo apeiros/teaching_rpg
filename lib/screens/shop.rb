@@ -44,9 +44,9 @@ module Screens
         itemdesc= @items[@cursorline].desc
         if itemdesc.split('').length > 80
           lineone = itemdesc.split('')[0..79]
-          linetwo = itemdesc.split('')[80..(@cursorline.split('').length-1)]
+          linetwo = itemdesc.split('')[80..(itemdesc.split('').length-1)]
         else
-          lineone = itemdesc.split('')[0..(@cursorline.split('').length-1)]
+          lineone = itemdesc.split('')[0..(itemdesc.split('').length-1)]
           linetwo = ''
         end
         s << ljust(" "*20+"#{lineone}", Black)
