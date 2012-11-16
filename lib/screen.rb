@@ -51,7 +51,7 @@ class Screen
   end
 
   def buffer(line)
-    @buffer << line.sub(/\n?$/, "\n")
+    @buffer << line
   end
 
   def draw
