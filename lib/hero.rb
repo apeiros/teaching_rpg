@@ -6,8 +6,8 @@ require 'loot'
 # Our hero actors are represented by this class
 class Hero
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
-  attr_accessor :sword, :blocking
-  attr_reader :name, :health_points, :magic_points, :level, :experience, :gold, :backpack
+  attr_accessor :sword, :blocking, :gold
+  attr_reader :name, :health_points, :magic_points, :level, :experience, :backpack
 
   def initialize(name)
     @name               = name
@@ -46,6 +46,19 @@ class Hero
     looted
   end
 
+  def add_item(item)
+    unless @backpack[item]
+      @backpack << {item => 1}    
+    else
+      @backpack[item] += 1
+    end  
+  end
+  
+  
+  def rem_item(item)
+    @backpack.delete(item)
+  end
+  
   def regenerate
     @health_points = @max_health_points
     @magic_points  = @max_magic_points

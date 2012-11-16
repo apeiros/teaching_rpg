@@ -4,7 +4,7 @@ require 'screen'
 
 module Screens
   class Shop < Screen
-    attr_accessor :cursor, :items
+    attr_accessor :cursor, :hero
 
     Row = "\e[38;5;#{Black};48;5;%dm%5sx %-12s %-16s %5d$"
 
@@ -17,7 +17,11 @@ module Screens
 
     # returns whether the cursor can be moved down
     def move_down?
-      @cursor+1 < @max_items
+      @cursor+1 < @max_items && @items[@cursor+1]
+    end
+    
+    def highlighted_item
+      @items[@cursor]
     end
 
     # returns whether the cursor can be moved up
