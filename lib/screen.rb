@@ -50,9 +50,17 @@ class Screen
     flush
   end
 
+  def buffer(line)
+    @buffer << line.sub(/\n?$/, "\n")
+  end
+
   def draw
+    @buffer   = []
+    returned  = rendered
+    returned  = @buffer.join unless @buffer.empty?
+
     print ResetCursor
-    print rendered.chomp
+    print returned.chomp
     flush
   end
 
