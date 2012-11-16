@@ -22,7 +22,8 @@ module Scenes
                    's' => :move_down,
                    'd' => :move_right,
                    'i' => :use_item,
-                   'q' => :quit
+                   'q' => :quit,
+                   'b' => :shop
     end
 
     def use_item
@@ -90,6 +91,10 @@ module Scenes
 
     def path_for_level(level)
       'data/maps/level_%02d' % level
+    end
+    
+    def shop
+      Scenes::Shopping.run(@game)
     end
   end
 end
