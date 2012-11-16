@@ -44,12 +44,11 @@ module Screens
         itemdesc= @items[@cursor].desc
         lineone = itemdesc
         linetwo = ''
-        end
         s << ljust(" "*20+"#{lineone}", Black)
         s << ljust(" "*20+"#{linetwo}", Black)
       else
-      s << ljust("", Black)    
-      s << ljust("", Black)     
+        s << ljust("", Black)    
+        s << ljust("", Black)     
       end
       
       s << help
