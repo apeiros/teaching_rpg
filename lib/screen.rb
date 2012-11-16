@@ -72,21 +72,39 @@ class Screen
     $stdout.flush
   end
 
+  # @option options [Integer] :foreground
+  #   The foreground/text color. Defaults to Black.
+  # @option options [Integer] :background
+  #   The background color. Defaults to White.
+  # @option options [Boolean] :bold
+  #   Whether the tet should be bold. Defaults to false.
+  # @option options [Symbol] :align
+  #   Alignment of the text. :left, :center or :right. Defaults to :left.
+  # @option options [Integer] :width
+  #   The width of the box. Defaults to the screen width.
+  # @option options [Integer] :height
+  #   The height of the box. Defaults to the number of lines + padding.
+  # @option options [Integer, Array<Integer>] :padding
+  #   The padding. If a single integer is given, it is treated as left/right padding.
+  #   If an array of 2 integers is given, the first is used as top/bottom, second is used as left/right.
+  #   If an array of 4 integers is given, they are used as top, right, bottom, left padding, in that order.
+  #   Unspecified paddings default to 0.
   def box(text, options={})
-    text                = text.chomp
-    foreground          = options.fetch(:foreground, Black)
-    background          = options.fetch(:background, White)
-    bold                = options.fetch(:bold,       false) ? ';1' : ''
-    align               = options.fetch(:align,      :left)
-    width               = options.fetch(:width) { screen_width }
-    height              = options.fetch(:height) { text.count("\n")+1 }
-    padt,padr,padb,padl = expand_padding(options.fetch(:padding, 0)) # top, right, bottom, left - like css
-    padt,padr,padb,padl = "\n"*padt,' '*padr,"\n"*padb,' '*padl
-    lines               = word_wrap(padt+text+padb, width).split(/\n/).first(height)
+    text                    = text.chomp
+    foreground              = options.fetch(:foreground, Black)
+    background              = options.fetch(:background, White)
+    bold                    = options.fetch(:bold,       false) ? ';1' : ''
+    align                   = options.fetch(:align,      :left)
+    width                   = options.fetch(:width) { screen_width }
+    padt,padr,padb,padl     = expand_padding(options.fetch(:padding, 0)) # top, right, bottom, left - like css
+    height                  = options.fetch(:height) { text.count("\n")+1+padt+padb }
+    padts,padbs             = "\n"*padt,"\n"*padb
+    width_after_padding     = width-padl-padr
+    lines                   = word_wrap(padts+text+padbs, width_after_padding).split(/\n/).first(height)
     lines.concat(['']*(height-lines.size))
 
     "\e[38;5;#{foreground};48;5;#{background}#{bold}m"+
-      lines.map { |line| line(padl+line+padr, width, align) }.join+
+      lines.map { |line| line(line, width, align, padl, padr) }.join+
       "\e[0m"
   end
 
@@ -104,21 +122,23 @@ class Screen
     text.gsub(/(.{1,#{width}})( +|$\n?)|(.{1,#{width}})/, "\\1\\3\n")
   end
 
-  def line(text, width=screen_width, align=:left)
+  def line(text, width=screen_width, align=:left, lpad=0, rpad=0)
     size  = char_count(text)
-    pad   = width-size
+    pad   = width-size-lpad-rpad
     case align
       when :left
-        "#{text}#{' '*pad}\n"
+        rpad += pad
       when :right
-        "#{' '*pad}#{text}\n"
+        lpad += pad
       when :center
-        lpad = pad/2
-        rpad = pad-lpad
-        "#{' '*lpad}#{text}#{' '*rpad}\n"
+        lipad = pad/2
+        ripad = pad-lipad
+        lpad  += lipad
+        rpad  += ripad
       else
         raise ArgumentError, "Unknown alignment #{align.inspect}"
     end
+    "#{' '*lpad}#{text}#{' '*rpad}\n"
   end
 
   def ljust(text, bg=nil, reset=true)
