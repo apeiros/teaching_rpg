@@ -28,25 +28,11 @@ module Screens
       s << hero_stats(@hero)
 
       @items.each_with_index do |item, index|
-        if index == @cursor
-          row_color = 51
-        elsif index.even?
-          row_color = 251
-        else
-          row_color = White
-        end
-        s << ljust("\e[38;5;#{Black};48;5;#{row_color}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", row_color)
+        s << ljust("\e[38;5;#{Black};48;5;#{row_color(index)}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", row_color(index))
       end
 
       @items.size.upto(@max_items-1) do | index |
-        if index == @cursor
-          row_color = 51
-        elsif index.even?
-          row_color = 251
-        else
-          row_color = White
-        end
-        s << ljust("\e[38;5;#{White};48;5;#{row_color}m "*120 , row_color)
+        s << ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
       end
       if @items[@cursor]
         itemdesc= @items[@cursor].desc
@@ -71,5 +57,15 @@ module Screens
       )
     end
 
+  private
+    def row_color(index)
+      if index == @cursor
+        51
+      elsif index.even?
+        251
+      else
+        White
+      end
+    end
   end
 end
