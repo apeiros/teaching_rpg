@@ -15,7 +15,7 @@ module Screens
     def rendered
       s=[]
       
-      s << ljust(hero_stats(@hero), Black)
+      s << hero_stats(@hero)
      
       @items.each_with_index do |item, index| 
         if index == @cursor
