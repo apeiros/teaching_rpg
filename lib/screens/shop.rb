@@ -23,25 +23,19 @@ module Screens
     end
 
     def rendered
-      s=[]
-
-      s << hero_stats(@hero)
-
+      buffer hero_stats(@hero)
       @items.each_with_index do |item, index|
-        s << ljust("\e[38;5;#{Black};48;5;#{row_color(index)}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", row_color(index))
+        buffer ljust("\e[38;5;#{Black};48;5;#{row_color(index)}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", row_color(index))
       end
-
       @items.size.upto(@max_items-1) do | index |
-        s << ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
+        buffer ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
       end
       if @items[@cursor]
-        s << box(@items[@cursor].desc, padding: 2, height: 2, background: 220)
+        buffer box(@items[@cursor].desc, padding: 1, height: 2, background: 220)
       else
-        s << box("", height: 2, background: 220)
+        buffer box("", height: 2, background: 220)
       end
-
-      s << help
-      s.join
+      buffer help
     end
 
     def help
