@@ -1,0 +1,30 @@
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx~~~~~~~~~~~~~~~
+......                                                       ~~~~~~~~~~~~~~
+....                                                         x~~~~~~~~~~~~~
+...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx              xx~~~~~~~~~~~~
+...xxxxxxxxxxxxxxxx~~xxxxxxxxxxxxxxxxxxxxxxxxxx              xxxx~~~~~~~~~~
+...xxxxxxxxxxxxxx~~~~~xxxxxxxxxxxxxxxxxxxxxxxxx              xxxxxxx~~~~~~~
+...xxxxxxxxxxxxxxx~~~~xxxxxxxxxxxxxxxxxxxxxxxxx              xxxxxxxxxxx~~~
+...xxxxxxxxxxxxxxxx~~xxxxxxxxxxxxxxxxxxxxxxxxxx              xxxxxxxxxxxxxx
+....xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx....      ....xxxxxxxxxxxxxx
+.....xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..      ..xxxxxxxxxxxxxxxx
+......xxxxxxxxxxxxxxxxx~xxxxxxxxx##################      ##################
+......xxxxxxxxxxxxxxxx~~~xxxxxxxx##################      ##################
+.........xxxxxxxxxxxxx~~~xxxxxxxx######                              ######
+~~..........xxxxxxxxxxx~xxxxxxxxx#####                                 ####
+~~~~~..........xxxxxxxxxxxxxxxxxx###                                    ###
+~~~~~~~~..........xxxxxxxxxxxxxxx###                                    ###
+~~~~~~~~~~~..........xxxxxxxxxxxx###     ##          ##        ##       ###
+~~~~~~~~~~~~~..........xxxxxxxxxx###    #~~#        #~~#      #~~#      ###
+~~~~~~~~~~~~~~~..........xxxxxxxx###     ##          ##        ##       ###
+~~~~~~~~~~~~~~~~..........xxxxxxx###                                    ###
+~~~~~~~~~~~~~~~~~..........xxxxxx###                                    ###
+~~~~~~~~~~~~~~~~~..........xxxxxx###                                    ###
+~~~~~~~~~~~~~~~~..........xxxxxxx###                                    ###
+~~~~~~~~~~~~~~~..........xxxxxxxx###            ####    ####            ###
+~~~~~~~~~~~~~~~..........xxxxxxxx###            #          #            ###
+~~~~~~~~~~~~~~~~..........xxxxxxx###            #          #     ###==#####
+~~~~~~~~~~~~~~~~~..........xxxxxx###            #          #     ##=====###
+~~~~~~~~~~~~~~~~~~~~..........xxx###            #    ==    #     ##=====###
+~~~~~~~~~~~~~~~~~~~~~~..........x##########################################
+~~~~~~~~~~~~~~~~~~~~~~~..........##########################################

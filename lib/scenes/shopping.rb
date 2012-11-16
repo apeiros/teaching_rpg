@@ -25,7 +25,7 @@ module Scenes
     def choose
       if @screen.hero.gold >= @screen.highlighted_item.price
         @screen.hero.gold -= @screen.highlighted_item.price
-        @screen.hero.add_item(@screen.highlighted_item)
+        @screen.hero.backpack.add(@screen.highlighted_item)
         @screen.highlighted_item.quantity -= 1
         if @screen.highlighted_item.quantity <= 0
           @screen.highlighted_item.delete

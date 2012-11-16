@@ -46,22 +46,7 @@ class Hero
     looted
   end
 
-  def add_item(item)
-    unless @backpack[item]
-      @backpack[item] = 1    
-    else
-      @backpack[item] += 1
-    end  
-  end
-  
-  
-  def remove_item(item)
-    if @backpack[item] > 1
-        @backpack -= 1  
-    else 
-      @backpack.delete(item)
-    end
-  end
+
   
   def regenerate
     @health_points = @max_health_points

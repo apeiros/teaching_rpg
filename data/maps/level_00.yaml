@@ -1,6 +1,6 @@
 --- 
 start: [59, 36]
-enemy_probability: 0.11
+enemy_probability: 0.04
 enemies:
   Wabbit:           10
   Decaying Corpse:  3
