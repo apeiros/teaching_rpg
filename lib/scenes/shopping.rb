@@ -6,7 +6,7 @@ require 'scenes'
 module Scenes
   class Shopping < Scene
     ShopItem = Struct.new(:type, :name, :quantity, :price, :desc); ]
-    def initialize(game, items = [ShopItem.new('Use', 'Apple', 20, 5, 'A pretty green apple'), ShopItem.new('Helmet', 'Wool Cap', 1, 200, 'This is desc of wool cap'))
+    def initialize(game, items = [ShopItem.new('Use', 'Apple', 20, 5, 'A pretty green apple'), ShopItem.new('Helmet', 'Wool Cap', 1, 200, 'This is desc of wool cap') ] )
       super()     
       @screen = Screens::Shop.new(@game.hero, items )
     end
