@@ -35,14 +35,9 @@ module Screens
         s << ljust("\e[38;5;#{White};48;5;#{row_color(index)}m "*120 , row_color(index))
       end
       if @items[@cursor]
-        itemdesc= @items[@cursor].desc
-        lineone = itemdesc
-        linetwo = ''
-        s << ljust(" "*20+"#{lineone}", Black)
-        s << ljust(" "*20+"#{linetwo}", Black)
+        s << box(@items[@cursor].desc, padding: 2, height: 2, background: 220)
       else
-        s << ljust("", Black)
-        s << ljust("", Black)
+        s << box("", height: 2, background: 220)
       end
 
       s << help
@@ -60,9 +55,9 @@ module Screens
   private
     def row_color(index)
       if index == @cursor
-        51
+        87
       elsif index.even?
-        251
+        253
       else
         White
       end
