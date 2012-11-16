@@ -5,11 +5,12 @@ require 'scenes'
   
 module Scenes
   class Shopping < Scene
-    
-    def initialize(shop)
-      @shop        = shop
-      @@cursorline = 41
-      @screen = Screens::Shop.new(nil, (ShopItem = Struct.new(:type, :name, :quantity, :price, :desc); items = [ShopItem.new('Use', 'Apple', 20, 5), ShopItem.new('Helmet', 'Wool Cap', 1, 200)])  )
+    ShopItem = Struct.new(:type, :name, :quantity, :price, :desc); items = [ShopItem.new('Use', 'Apple', 20, 5, 'A pretty green apple'), ShopItem.new('Helmet', 'Wool Cap', 1, 200, 'This is desc of wool cap')]
+    def initialize()
+      
+      
+      @screen = Screens::Shop.new(nil, ShopItem )
+      @screen.cursorline = 41
     end
     
     def main
@@ -24,19 +25,21 @@ module Scenes
     
     def move_up
       
-      if @@cursorline > 0 
-        @@cursorline -= 1
-        @shop.draw
-      else beep
+      if @screen.cursorline > 1 
+        @screen.cursorline -= 1
+        @screen.draw
+      else 
+       beep
       end
       
     end
     
     def move_down
-      if @@cursorline < 40
-      @@cursorline += 1
-      @shop.draw
-      else beep
+      if @screen.cursorline < 40
+      @screen.cursorline += 1
+      @screen.draw
+      else 
+       beep
       end
     end  
   end

@@ -6,7 +6,6 @@ require 'screens/map'
 require 'screens/items'
 require 'screens/battle'
 require 'screens/quit'
-require 'screens/shop'
 
 module Screens
 end

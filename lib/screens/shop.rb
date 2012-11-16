@@ -4,9 +4,11 @@ require 'screen'
 
 module Screens
   class Shop < Screen
+    attr_accessor :cursorline
     def initialize(hero, items)
       @hero  = hero
       @items  = items
+      @cursorline = 41
     end
 
     def rendered
@@ -38,9 +40,7 @@ module Screens
         s  << ljust("\e[38;5;#{White};48;5;#{White}m "*120 , White)
         end      
       end
-      if @items[@@cursorline] == nil
-        itemdesc = nil
-      else
+      if @items[@@cursorline]
         itemdesc= @items[@@cursorline].desc
         lineone = itemdesc.split('')[0..79]
         linetwo = itemdesc.split('')[80..159]
