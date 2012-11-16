@@ -42,8 +42,13 @@ module Screens
       end
       if @items[@cursorline]
         itemdesc= @items[@cursorline].desc
-        lineone = itemdesc.split('')[0..79]
-        linetwo = itemdesc.split('')[80..159]
+        if itemdesc.split('').length > 80
+          lineone = itemdesc.split('')[0..79]
+          linetwo = itemdesc.split('')[80..(@cursorline.split('').length-1)]
+        else
+          lineone = itemdesc.split('')[0..(@cursorline.split('').length-1)]
+          linetwo = ''
+        end
         s << ljust(" "*20+"#{lineone}", Black)
         s << ljust(" "*20+"#{linetwo}", Black)
       else
