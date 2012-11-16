@@ -80,14 +80,15 @@ class Screen
     align               = options.fetch(:align,      :left)
     width               = options.fetch(:width,      screen_width)
     height              = options.fetch(:height,     text.count("\n")+1)
-    padt,padr,padb,padl = expand_padding(options.fetch(:padding, 0))
-    lines               = word_wrap(text, width).split(/\n/).first(height)
+    padt,padr,padb,padl = expand_padding(options.fetch(:padding, 0)) # top, right, bottom, left - like css
+    padt,padr,padb,padl = "\n"*padt,' '*padr,"\n"*padb,' '*padl
+    lines               = word_wrap(padt+text+padb, width).split(/\n/).first(height)
     lines.concat(['']*(height-lines.size))
 
     [
       "\e[38;5;#{foreground};48;5;#{background}#{bold}m",
       *lines.map { |line|
-        line(line, width, align)
+        line(padl+line+padr, width, align)
       },
       "\e[0m"
     ].join
