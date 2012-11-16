@@ -12,6 +12,16 @@ module Screens
       @max_items  = 36
     end
 
+    # returns whether the cursor can be moved down
+    def move_down?
+      @cursor+1 < @max_items
+    end
+
+    # returns whether the cursor can be moved up
+    def move_up?
+      @cursor > 0
+    end
+
     def rendered
       s=[]
 
