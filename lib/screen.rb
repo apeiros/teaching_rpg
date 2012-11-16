@@ -8,6 +8,7 @@ class Screen
   ClearScreen   = "\e[2J"
   ResetCursor   = "\e[1;1H"
   ResetColor    = "\e[0m"
+  CursorToDebug = "\e[41;1H"
 
   Black   = 16
   White   = 231
@@ -93,6 +94,14 @@ class Screen
     "#{background}#{lpadding}#{text}#{background}#{rpadding}#{reset}\n"
   end
 
+  def debug(text)
+    print CursorToDebug+ResetColor+text+ResetCursor
+    flush
+  end
+  def debugi(obj)
+    debug obj.inspect
+  end
+
   def scroll(ary, height, width, position, background=White)
     ary  = ary[position, height]
     fill = height - ary.length
@@ -125,6 +134,7 @@ class Screen
   def hero_stats(unit)
     ljust(
       "\e[38;5;#{White};48;5;#{Black};1m #{'%16s' % unit.name} " \
+      "\e[0;38;5;#{White};48;5;#{Black}m L#{unit.level} (#{unit.experience} EXP)" \
       "\e[38;5;#{Red}m #{'%4d' % unit.health_points} HP " \
       "\e[38;5;#{Cyan}m #{'%4d' % unit.magic_points} MP " \
       "\e[38;5;#{Yellow}m #{'%5d' % unit.gold}$ ",

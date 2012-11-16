@@ -1,0 +1,4 @@
+default_class: 'HealingItems'
+items:
+  Apple:  20
+  Potion: 100

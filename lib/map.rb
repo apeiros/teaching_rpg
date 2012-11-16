@@ -47,15 +47,28 @@ class Map
     }, meta)
   end
 
-  attr_reader :tiles, :height, :width, :player_position, :enemies, :enemy_probability
+  attr_reader :tiles, :height, :width, :player_position, :enemies, :enemy_probability, :meta
+  attr_accessor :screen_width, :screen_height, :clipping_x, :clipping_y
 
   def initialize(tiles, meta)
-    @tiles              = tiles
-    @meta               = meta
-    @player_position    = Position.new(*meta['start'])
-    @width, @height     = @tiles.first.size, @tiles.size
-    @enemy_probability  = meta['enemy_probability']
-    @enemies            = meta['enemies']
+    @tiles                    = tiles
+    @meta                     = meta
+    @player_position          = Position.new(*meta['start_position'])
+    @width, @height           = @tiles.first.size, @tiles.size
+    raise "Invalid map" unless @tiles.all? { |row| row.size == @width }
+    @enemy_probability        = meta['enemy_probability']
+    @enemies                  = meta['enemies']
+    @screen_width             = 120
+    @screen_height            = 38
+    @clipping_x, @clipping_y  = meta['start_clipping']
+  end
+
+  def set_screen_clipping(x, y)
+    @clipping_x, @clipping_y = x, y
+  end
+
+  def relative_position
+    Position.new(@player_position.x-@clipping_x, @player_position.y-@clipping_y)
   end
 
   def move_up
@@ -75,10 +88,10 @@ class Map
     Walkable.include?(@tiles[y][x])
   end
 
-  def slice(x, y, width, height)
-    y.upto(y+height-1).map { |y|
+  def rendered_slice
+    @clipping_y.upto(@clipping_y+@screen_height-1).map { |y|
       row = @tiles.at(y)
-      x.upto(x+width-1).map { |x|
+      @clipping_x.upto(@clipping_x+@screen_width-1).map { |x|
         cell = row.at(x)
         cell = :player if (x == @player_position.x && y == @player_position.y)
         format, char = Render[cell]

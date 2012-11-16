@@ -1,0 +1,9 @@
+name:           Decaying Corpse
+level:          2
+health_points:  [28,34]
+attack:         [4,7]
+armor:          1
+experience:     [100,200]
+gold:           [5,10]
+drops:
+  Potion: 0.5

@@ -5,8 +5,8 @@ require 'screen'
 module Screens
   class Map < Screen
     def initialize(hero, map)
-      @hero = hero
-      @map  = map
+      @hero   = hero
+      @map    = map
     end
 
     def rendered
@@ -14,7 +14,25 @@ module Screens
     end
 
     def map_slice
-      @map.slice(0,0,120,38)
+      @map.rendered_slice
+    end
+
+    def scroll_x(new_clipping_x, duration)
+      interval = duration.fdiv((@map.clipping_x-new_clipping_x).abs)
+      @map.clipping_x.send(new_clipping_x < @map.clipping_x ? :downto : :upto, new_clipping_x) do |x|
+        @map.clipping_x = x
+        draw
+        sleep interval
+      end
+    end
+
+    def scroll_y(new_clipping_y, duration)
+      interval = duration.fdiv((@map.clipping_y-new_clipping_y).abs)
+      @map.clipping_y.send(new_clipping_y < @map.clipping_y ? :downto : :upto, new_clipping_y) do |y|
+        @map.clipping_y = y
+        draw
+        sleep interval
+      end
     end
 
     def help

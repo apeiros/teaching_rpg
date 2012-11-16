@@ -8,9 +8,10 @@ module Scenes
     def initialize(game, map)
       super(game)
       @map        = map
+      @hero       = @game.hero
       @retreated  = false
       pick_enemy
-      @screen = Screens::Battle.new(@game.hero, @enemy)
+      @screen = Screens::Battle.new(@hero, @enemy)
       flush_input
     end
 
@@ -22,6 +23,18 @@ module Scenes
         @screen.report "#{@enemy.name} has killed you. Game over"
       else
         @screen.report "#{@enemy.name} died. Congratulations, you win!"
+        @screen.draw
+        lvl  = @hero.level
+        loot = @hero.loot(@enemy)
+        lup  = @hero.level > lvl
+        sleep 0.3
+        @screen.report "#{@enemy.name} dropped #{loot.gold} gold, you gained #{loot.experience} experience."
+        @screen.draw
+        if lup
+          sleep 0.3
+          @screen.report "LEVEL UP! You are now #{@hero.level}"
+          @screen.draw
+        end
       end
       @screen.report("Press space to continue")
       @screen.draw
@@ -40,7 +53,7 @@ module Scenes
 
     def main
       @screen.draw
-      @game.hero.blocking = false
+      @hero.blocking = false
       begin
         result = expect_input 'a' => :attack,
                               'r' => :retreat,
@@ -48,24 +61,24 @@ module Scenes
                               'i' => :use_item,
                               'q' => :quit
       end until result || @exit
-      @exit = @exit || @game.hero.dead? || @enemy.dead?
+      @exit = @exit || @hero.dead? || @enemy.dead?
       unless @exit || @retreated || @enemy.dead?
         @screen.draw
         sleep 0.5
-        damage_dealt = @game.hero.take_physical_damage @enemy.attack
+        damage_dealt = @hero.take_physical_damage @enemy.attack
         @screen.report "#{@enemy.name} attacks you and deals #{damage_dealt} damage"
       end
     end
 
     def attack
-      damage_dealt = @enemy.take_physical_damage @game.hero.attack
+      damage_dealt = @enemy.take_physical_damage @hero.attack
       @screen.report "You attack #{@enemy.name} and deal #{damage_dealt} damage"
       true
     end
 
     def block
       @screen.report "You are assuming a defensive position"
-      @game.hero.blocking = true
+      @hero.blocking = true
       true
     end
 
@@ -82,7 +95,7 @@ module Scenes
 
     def pick_enemy
       enemy_name  = @map.enemies.keys.sample
-      @enemy      = Enemies[enemy_name].dup
+      @enemy      = @game.enemies.spawn(enemy_name)
       @map.enemies[@enemy.name] -= 1
       @map.enemies.delete(@enemy.name) if @map.enemies[@enemy.name] == 0
     end

@@ -45,6 +45,13 @@ class Scene
     end until char == ' '
   end
 
+  def debug(*args)
+    @screen.debug(*args)
+  end
+  def debugi(*args)
+    @screen.debugi(*args)
+  end
+
   def beep
     $stdout.print "\a"
     $stdout.flush

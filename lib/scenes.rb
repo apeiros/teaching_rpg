@@ -5,6 +5,8 @@ require 'scenes/help'
 require 'scenes/map'
 require 'scenes/selectitem'
 require 'scenes/battle'
+require 'scenes/victory'
+require 'scenes/defeat'
 
 module Scenes
 end
