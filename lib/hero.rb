@@ -1,17 +1,22 @@
 # encoding: utf-8
 
 require 'items'
+require 'loot'
 
 # Our hero actors are represented by this class
 class Hero
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
   attr_accessor :sword, :blocking
-  attr_reader :name, :health_points, :gold, :backpack
+  attr_reader :name, :health_points, :magic_points, :level, :experience, :gold, :backpack
 
   def initialize(name)
     @name               = name
+    @level              = 1
+    @experience         = 0
     @max_health_points  = 100
     @health_points      = 100   # every hero starts with 100 health points
+    @max_magic_points   = 0
+    @magic_points       = 0
     @sword              = 10    # attack
     @helmet             = 0     # initial armor equipment is 0
     @gloves             = 0
@@ -27,8 +32,27 @@ class Hero
     )
   end
 
-  def heal(amount)
-    @health_points += amount
+  def loot(unit)
+    looted = unit.loot
+    @experience += looted.experience
+    @gold       += looted.gold
+    if @experience > 1000
+      @experience -= 1000
+      @level      += 1
+      @max_health_points += @level*10
+      regenerate
+    end
+
+    looted
+  end
+
+  def regenerate
+    @health_points = @max_health_points
+    @magic_points  = @max_magic_points
+  end
+
+  def heal(amount=nil)
+    @health_points += (amount || @max_health_points)
     @health_points = @max_health_points if @health_points > @max_health_points
 
     amount
@@ -42,14 +66,6 @@ class Hero
     @health_points  = 0 if @health_points < 0
 
     damage
-  end
-
-  def health_points
-    @health_points
-  end
-
-  def magic_points
-    0
   end
 
   def attack

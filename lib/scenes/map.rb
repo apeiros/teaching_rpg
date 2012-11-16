@@ -11,6 +11,10 @@ module Scenes
       @screen = Screens::Map.new(game.hero, @map)
     end
 
+    def victory?
+      @map.enemies.empty?
+    end
+
     def main
       @screen.draw
       expect_input 'w' => :move_up,
@@ -44,10 +48,31 @@ module Scenes
     def move
       @previous_position = @map.player_position.dup
       yield
-      if moved? && enemy_encounter?
-        @screen.draw
-        sleep 0.5
-        Scenes::Battle.run(@game, @map)
+      if moved?
+        ax, ay = *@map.player_position
+        rx, ry = *@map.relative_position
+        mw     = @map.width
+        mh     = @map.height
+        cx     = @map.clipping_x
+        cy     = @map.clipping_y
+        dur    = 0.5
+
+        if rx < 20 && cx > 0
+          @screen.scroll_x([@map.clipping_x-40, 0].max, dur)
+        elsif rx > @map.screen_width-20 && cx+@map.screen_width < mw
+          @screen.scroll_x([@map.clipping_x+40, @map.width-@map.screen_width].min, dur)
+        elsif ry < 8 && cy > 0
+          @screen.scroll_y([@map.clipping_y-16, 0].max, dur)
+        elsif ry > @map.screen_height-8 && cy+@map.screen_height < mh
+          @screen.scroll_y([@map.clipping_y+16, @map.height-@map.screen_height].min, dur)
+        end
+
+        if enemy_encounter?
+          @screen.draw
+          sleep 0.5
+          Scenes::Battle.run(@game, @map)
+          @exit = true if @map.enemies.empty?
+        end
       end
     end
 
@@ -67,12 +92,4 @@ module Scenes
       'data/maps/level_%02d' % level
     end
   end
-end
-
-__END__
-if @map.enemies.empty?
-  reprint "This dungeon is cleared, congratulations"
-  throw(:exit)
-else
-  render_map
 end

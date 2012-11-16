@@ -31,13 +31,14 @@ class Game
     rows < 40 || columns < 120
   end
 
-  attr_reader :scenes, :hero, :map, :shop, :enemy
+  attr_reader :scenes, :hero, :map, :shop, :enemy, :enemies
 
   def initialize
-    @scenes = []
-    @map    = nil
-    @hero   = Hero.new('Aldaran')
-    @enemy  = nil
+    @scenes   = []
+    @map      = nil
+    @hero     = Hero.new('Aldaran')
+    @enemy    = nil
+    @enemies  = Enemies.new.tap(&:load_directory)
   end
 
   def run

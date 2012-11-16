@@ -1,0 +1,10 @@
+name:           Wabbit
+level:          1
+health_points:  [20,25]
+attack:         [3,5]
+armor:          0
+experience:     [100,200]
+gold:           [1,5]
+drops:
+  Apple:        0.5
+  Woolcap:      0.5

@@ -7,6 +7,8 @@ require 'screens/items'
 require 'screens/battle'
 require 'screens/quit'
 require 'screens/shop'
+require 'screens/text'
+
 
 module Screens
 end

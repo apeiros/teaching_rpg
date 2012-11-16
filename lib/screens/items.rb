@@ -37,7 +37,7 @@ module Screens
         'W'     => 'Up',
         'S'     => 'Down',
         'Space' => 'Select Item',
-        'Q'     => 'Quit'
+        'Q'     => 'Exit'
       )
     end
   end
