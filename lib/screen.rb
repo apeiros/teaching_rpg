@@ -175,11 +175,9 @@ class Screen
   end
 
   def key_map_help(keys)
-    size = keys.size*4+keys.values.inject(0) { |s,a| s+a.length }
-
     ljust("\e[48;5;#{Black}m"+keys.map { |key, action|
       "\e[38;5;226;1m #{key} \e[38;5;#{White}m#{action} "
-    }.join, 0)
+    }.join, Black)
   end
 
   def unit_stats(unit)
