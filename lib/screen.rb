@@ -72,6 +72,58 @@ class Screen
     $stdout.flush
   end
 
+  def box(text, options={})
+    text                = text.chomp
+    foreground          = options.fetch(:foreground, Black)
+    background          = options.fetch(:background, White)
+    bold                = options.fetch(:bold,       false) ? ';1' : ''
+    align               = options.fetch(:align,      :left)
+    width               = options.fetch(:width,      screen_width)
+    height              = options.fetch(:height,     text.count("\n")+1)
+    padt,padr,padb,padl = expand_padding(options.fetch(:padding, 0))
+    lines               = word_wrap(text, width).split(/\n/).first(height)
+    lines.concat(['']*(height-lines.size))
+
+    [
+      "\e[38;5;#{foreground};48;5;#{background}#{bold}m",
+      *lines.map { |line|
+        line(line, width, align)
+      },
+      "\e[0m"
+    ].join
+  end
+
+  def expand_padding(padding)
+    if padding.is_a?(Integer)
+      [0, padding, 0, padding]
+    elsif padding.size == 2
+      padding.values_at(0,1,0,1)
+    else
+      padding
+    end
+  end
+
+  def word_wrap(text, width=screen_width)
+    text.gsub(/(.{1,#{width}})( +|$\n?)|(.{1,#{width}})/, "\\1\\3\n")
+  end
+
+  def line(text, width=screen_width, align=:left)
+    size  = char_count(text)
+    pad   = width-size
+    case align
+      when :left
+        "#{text}#{' '*pad}\n"
+      when :right
+        "#{text}#{' '*pad}\n"
+      when :center
+        lpad = pad/2
+        rpad = pad-lpad
+        "#{' '*lpad}#{text}#{' '*rpad}\n"
+      else
+        raise ArgumentError, "Unknown alignment #{align.inspect}"
+    end
+  end
+
   def ljust(text, bg=nil, reset=true)
     size        = char_count(text)
     padding     = ' '*(screen_width-size)
