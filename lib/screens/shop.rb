@@ -8,7 +8,7 @@ module Screens
     def initialize(hero, items)
       @hero  = hero
       @items  = items
-      @cursorline = 41
+      @cursorline = 1
     end
 
     def rendered
@@ -17,7 +17,6 @@ module Screens
       s << ljust("LiNe WhErE Hero Stats will GOOOOOoOo", Black)
       counter = 0
       @items.each do | item | 
-        lspacer = 40 - ( item.type.length + item.name.length + item.quantity.to_s.length + 4 )
         counter += 1
         if counter == @cursorline
           if !counter.odd?
@@ -25,12 +24,13 @@ module Screens
           else 
           s << ljust("\e[38;5;#{Black};48;5;#{White}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", White)
           end
-        end
-        if counter.odd?
-          s << ljust("\e[38;5;#{Black};48;5;#{Cyan}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", Cyan)
-        else 
-          s << ljust("\e[38;5;#{Black};48;5;#{White}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", White)
-        end
+        else       
+          if counter.odd?
+            s << ljust("\e[38;5;#{Black};48;5;#{Cyan}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", Cyan)
+          else 
+            s << ljust("\e[38;5;#{Black};48;5;#{White}m "*20 + "     " + " "*(3-item.quantity.to_s.length) + "#{item.quantity}x "+" "*(12-item.type.length) +"#{item.type} "+" "*(16-item.name.length)+"#{item.name}"+"            Price: " + " "*(5-item.price.to_s.length) + "#{item.price}$", White)
+          end  
+        end  
       end
       
       (36-counter).times do | x |

@@ -31,7 +31,7 @@ module Scenes
     end
     
     def move_down
-      if @screen.cursorline < 40
+      if @screen.cursorline < 37
         @screen.cursorline += 1
         @screen.draw
       else 
