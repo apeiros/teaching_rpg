@@ -78,20 +78,16 @@ class Screen
     background          = options.fetch(:background, White)
     bold                = options.fetch(:bold,       false) ? ';1' : ''
     align               = options.fetch(:align,      :left)
-    width               = options.fetch(:width,      screen_width)
-    height              = options.fetch(:height,     text.count("\n")+1)
+    width               = options.fetch(:width) { screen_width }
+    height              = options.fetch(:height) { text.count("\n")+1 }
     padt,padr,padb,padl = expand_padding(options.fetch(:padding, 0)) # top, right, bottom, left - like css
     padt,padr,padb,padl = "\n"*padt,' '*padr,"\n"*padb,' '*padl
     lines               = word_wrap(padt+text+padb, width).split(/\n/).first(height)
     lines.concat(['']*(height-lines.size))
 
-    [
-      "\e[38;5;#{foreground};48;5;#{background}#{bold}m",
-      *lines.map { |line|
-        line(padl+line+padr, width, align)
-      },
+    "\e[38;5;#{foreground};48;5;#{background}#{bold}m"+
+      lines.map { |line| line(padl+line+padr, width, align) }.join+
       "\e[0m"
-    ].join
   end
 
   def expand_padding(padding)
