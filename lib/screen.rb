@@ -115,7 +115,7 @@ class Screen
       when :left
         "#{text}#{' '*pad}\n"
       when :right
-        "#{text}#{' '*pad}\n"
+        "#{' '*pad}#{text}\n"
       when :center
         lpad = pad/2
         rpad = pad-lpad
