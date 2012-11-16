@@ -22,6 +22,19 @@ module Scenes
                    'q' => :quit
     end
 
+    def choose
+      if @game.hero.gold >= items[@cursor].price
+        @game.hero.gold -= items[@cursor].price
+        @game.hero.backpack << items[@cursor].dup
+        items[@cursor].quantity -= 1
+        if items[@cursor].quantity <= 0
+          items[@cursor].delete
+        end
+      else
+        beep
+      end
+    end
+
     def move_up
       if @screen.move_up?
         @screen.cursor -= 1

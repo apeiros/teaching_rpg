@@ -1,7 +1,7 @@
 --- 
 start_position: [96, 92]
 start_clipping: [37, 62]
-enemy_probability: 0.10
+enemy_probability: 0.05
 enemies:
   Wabbit:           5
   Decaying Corpse:  5
