@@ -7,7 +7,7 @@ module Scenes
   class Shopping < Scene
     ShopItem = Struct.new(:type, :name, :quantity, :price, :desc)
     def initialize(game, items = [ShopItem.new('Use', 'Apple', 20, 5, 'A pretty green apple'), ShopItem.new('Helmet', 'Wool Cap', 1, 200, 'This is desc of wool cap') ] )
-      super    
+      super(game)    
       @screen = Screens::Shop.new(@game.hero, items )
     end
     
@@ -22,26 +22,25 @@ module Scenes
     end
     
     def move_up
-      
       if @screen.cursorline > 1 
         @screen.cursorline -= 1
         @screen.draw
       else 
-       beep
-      end
-      
+        beep
+      end      
     end
     
     def move_down
       if @screen.cursorline < 40
-      @screen.cursorline += 1
-      @screen.draw
+        @screen.cursorline += 1
+        @screen.draw
       else 
-       beep
+        beep
       end
-    end  
+    end 
+    
+     
   end
-
 end
                
     
