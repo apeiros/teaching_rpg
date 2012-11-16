@@ -4,7 +4,7 @@ require 'screen'
 
 module Screens
   class Shop < Screen
-    attr_accessor :cursor
+    attr_accessor :cursor, :items
 
     Row = "\e[38;5;#{Black};48;5;%dm%5sx %-12s %-16s %5d$"
 

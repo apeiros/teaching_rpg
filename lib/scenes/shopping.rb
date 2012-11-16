@@ -23,12 +23,12 @@ module Scenes
     end
 
     def choose
-      if @game.hero.gold >= items[@cursor].price
-        @game.hero.gold -= items[@cursor].price
-        @game.hero.backpack << items[@cursor].dup
-        items[@cursor].quantity -= 1
-        if items[@cursor].quantity <= 0
-          items[@cursor].delete
+      if @game.hero.gold >= @screen.items[@cursor].price
+        @game.hero.gold -= @screen.items[@cursor].price
+        @game.hero.backpack << @screen.items[@cursor].dup
+        @screen.items[@cursor].quantity -= 1
+        if @screen.items[@cursor].quantity <= 0
+          @screen.items[@cursor].delete
         end
       else
         beep
