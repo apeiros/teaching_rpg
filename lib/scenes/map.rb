@@ -8,11 +8,11 @@ module Scenes
     def initialize(game, level)
       super(game)
       load_map_file(level)
-      @screen = Screens::Map.new(game.hero, @map)
+      @screen = Screens::Map.new(@hero, @map)
     end
 
     def victory?
-      @map.enemies.empty?
+      @map.enemies.empty? && @game.cleared_bosses.size == 1
     end
 
     def main
@@ -47,28 +47,13 @@ module Scenes
     end
 
     def move
-      @previous_position = @map.player_position.dup
+      @previous_position = @map.player.dup
       yield
       if moved?
-        ax, ay = *@map.player_position
-        rx, ry = *@map.relative_position
-        mw     = @map.width
-        mh     = @map.height
-        cx     = @map.clipping_x
-        cy     = @map.clipping_y
-        dur    = 0.5
-
-        if rx < 20 && cx > 0
-          @screen.scroll_x([@map.clipping_x-40, 0].max, dur)
-        elsif rx > @map.screen_width-20 && cx+@map.screen_width < mw
-          @screen.scroll_x([@map.clipping_x+40, @map.width-@map.screen_width].min, dur)
-        elsif ry < 8 && cy > 0
-          @screen.scroll_y([@map.clipping_y-16, 0].max, dur)
-        elsif ry > @map.screen_height-8 && cy+@map.screen_height < mh
-          @screen.scroll_y([@map.clipping_y+16, @map.height-@map.screen_height].min, dur)
-        end
-
-        if enemy_encounter?
+        scroll_map
+        if @map.point_of_interest?
+          send(*@map.point_of_interest)
+        elsif enemy_encounter?
           @screen.draw
           sleep 0.5
           Scenes::Battle.run(@game, @map)
@@ -78,7 +63,7 @@ module Scenes
     end
 
     def moved?
-      @previous_position != @map.player_position
+      @previous_position != @map.player
     end
 
     def enemy_encounter?
@@ -86,15 +71,61 @@ module Scenes
     end
 
     def load_map_file(level)
-      @map = ::Map.read_file(path_for_level(level))
+      @map = ::Map.read_file(@game, path_for_level(level))
     end
 
     def path_for_level(level)
-      'data/maps/level_%02d' % level
+      'data/maps/%s' % level
     end
-    
-    def shop
+
+    def scroll_map
+      ax, ay = *@map.player
+      rx, ry = *@map.relative_position
+      mw     = @map.width
+      mh     = @map.height
+      cx     = @map.clipping.x
+      cy     = @map.clipping.y
+      dur    = 0.5
+
+      if rx < 20 && cx > 0
+        @screen.scroll_x([@map.clipping.x-40, 0].max, dur)
+      elsif rx > @map.screen_width-20 && cx+@map.screen_width < mw
+        @screen.scroll_x([@map.clipping.x+40, @map.width-@map.screen_width].min, dur)
+      elsif ry < 8 && cy > 0
+        @screen.scroll_y([@map.clipping.y-16, 0].max, dur)
+      elsif ry > @map.screen_height-8 && cy+@map.screen_height < mh
+        @screen.scroll_y([@map.clipping.y+16, @map.height-@map.screen_height].min, dur)
+      end
+    end
+
+    def shop(*)
       Scenes::Shopping.run(@game)
+    end
+
+    def connection(level_name, connection)
+      from_map = @map.name
+      load_map_file(level_name)
+      @map.move_to_connection(from_map, connection)
+      @screen = Screens::Map.new(@hero, @map)
+    end
+
+    def boss(enemy_name)
+      @screen.draw
+      sleep 0.5
+      scene = Scenes::Battle.run(@game, @map, Game.spawn(enemy_name))
+      @game.defeated(@map.name, @map.player) if scene.victory?
+      @exit = true if @map.enemies.empty?
+    end
+
+    def inn(*)
+      screen = Screens::Text.new(
+        text: "The hero takes an nap\nYour health and magic points are fully restored.",
+        keys: {}
+      )
+      screen.draw
+      sleep 1.5
+      @hero.regenerate
+      @screen.draw
     end
   end
 end

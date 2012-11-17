@@ -2,15 +2,47 @@
 
 require 'map'
 require 'hero'
-require 'enemies'
 require 'scenes'
 require 'screens'
+require 'enemy'
+require 'inn'
+require 'shop'
+require 'item'
 
 
-# handles UI
+# handles global game state
 class Game
   class <<self
     attr_accessor :rows, :columns
+    attr_reader :inns, :enemies, :shops, :items
+  end
+
+  @items    = {}
+  @shops    = {}
+  @inns     = {}
+  @enemies  = {}
+
+  def self.spawn(enemy_name)
+    @enemies[enemy_name].spawn
+  end
+
+  def self.load_all
+    @items    = {}
+    @shops    = {}
+    @inns     = {}
+    @enemies  = {}
+
+    Dir.glob('data/enemies/**/*.yaml') do |file|
+      enemy = Enemy.from_file(file)
+      @enemies[enemy.name] = enemy
+    end
+    @inns = Hash[YAML.load_file('data/inns.yaml').map { |name, cost_per_night|
+      [name, Inn.new(cost_per_night)]
+    }]
+    Dir.glob('data/enemies/**/*.yaml') do |file|
+      shop = Shop.from_file(file)
+      @shops[shop.name] = shop
+    end
   end
 
   def self.run
@@ -31,14 +63,22 @@ class Game
     rows < 40 || columns < 120
   end
 
-  attr_reader :scenes, :hero, :map, :shop, :enemy, :enemies
+  attr_reader :scenes, :hero, :map, :shop, :enemy, :cleared_bosses
 
   def initialize
-    @scenes   = []
-    @map      = nil
-    @hero     = Hero.new('Aldaran')
-    @enemy    = nil
-    @enemies  = Enemies.new.tap(&:load_directory)
+    @scenes         = []
+    @map            = nil
+    @hero           = Hero.new('Aldaran')
+    @enemy          = nil
+    @cleared_bosses = {}
+  end
+
+  def defeated?(map, position)
+    @cleared_bosses[[map, position.to_a]]
+  end
+
+  def defeated(map, position)
+    @cleared_bosses[[map, position.to_a]] = true
   end
 
   def run

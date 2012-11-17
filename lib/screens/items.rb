@@ -14,7 +14,7 @@ module Screens
     end
 
     def rendered
-      unit_stats(@hero)+item_list+help
+      hero_stats(@hero)+item_list+help
     end
 
     def item_list

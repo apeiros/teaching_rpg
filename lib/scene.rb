@@ -9,6 +9,7 @@ class Scene
 
   def initialize(game)
     @game = game
+    @hero = game.hero
     @exit = false
   end
 

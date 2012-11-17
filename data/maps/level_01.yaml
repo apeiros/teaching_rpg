@@ -1,7 +1,12 @@
 --- 
-start_position: [96, 92]
-start_clipping: [37, 62]
+start_position: [97, 98]
+start_clipping: [37, 62] # auto
 enemy_probability: 0.05
 enemies:
-  Wabbit:           5
-  Decaying Corpse:  5
+  Wabbit:           25
+  Decaying Corpse:  15
+points_of_interest:
+  [97,10]:  ['boss',       'Rotting Carcass']
+  [96,99]:  ['connection', 'village_01', 0]
+  [97,99]:  ['connection', 'village_01', 1]
+  [98,99]:  ['connection', 'village_01', 2]

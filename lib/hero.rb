@@ -2,9 +2,12 @@
 
 require 'items'
 require 'loot'
+require 'inspector'
 
 # Our hero actors are represented by this class
 class Hero
+  include Inspector
+
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
   attr_accessor :sword, :blocking, :gold
   attr_reader :name, :health_points, :magic_points, :level, :experience, :backpack
@@ -27,6 +30,7 @@ class Hero
     @gold               = 100
     @blocking           = false
     @backpack           = Items.new(
+      100,
       Items::HealingItem.new('Apple',   20) => 10,
       Items::HealingItem.new('Potion', 100) =>  2
     )
@@ -47,7 +51,7 @@ class Hero
   end
 
 
-  
+
   def regenerate
     @health_points = @max_health_points
     @magic_points  = @max_magic_points

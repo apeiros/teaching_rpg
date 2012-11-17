@@ -1,0 +1,9 @@
+name:           Rotting Carcass
+level:          3
+health_points:  150
+attack:         [9,15]
+armor:          2
+experience:     500
+gold:           500
+drops:
+  Potion: 0.5

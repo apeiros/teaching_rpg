@@ -5,14 +5,24 @@ require 'scene'
 module Scenes
   class Battle < Scene
 
-    def initialize(game, map)
+    def initialize(game, map, enemy=nil)
       super(game)
-      @map        = map
-      @hero       = @game.hero
-      @retreated  = false
-      pick_enemy
+      @map            = map
+      @hero           = @game.hero
+      @retreated      = false
+      @restaff_enemy  = !!enemy
+      @enemy          = enemy || pick_enemy
+      @victory        = false
       @screen = Screens::Battle.new(@hero, @enemy)
       flush_input
+    end
+
+    def retreated?
+      @retreated
+    end
+
+    def victory?
+      @victory
     end
 
     def run
@@ -35,6 +45,7 @@ module Scenes
           @screen.report "LEVEL UP! You are now #{@hero.level}"
           @screen.draw
         end
+        @victory = true
       end
       @screen.report("Press space to continue")
       @screen.draw
@@ -95,12 +106,15 @@ module Scenes
 
     def pick_enemy
       enemy_name  = @map.enemies.keys.sample
-      @enemy      = @game.enemies.spawn(enemy_name)
-      @map.enemies[@enemy.name] -= 1
-      @map.enemies.delete(@enemy.name) if @map.enemies[@enemy.name] == 0
+      enemy       = Game.spawn(enemy_name)
+      @map.enemies[enemy.name] -= 1
+      @map.enemies.delete(enemy.name) if @map.enemies[enemy.name] == 0
+
+      enemy
     end
 
     def restaff_enemy
+      return unless @restaff_enemy
       if @map.enemies[@enemy.name]
         @map.enemies[@enemy.name] += 1
       else

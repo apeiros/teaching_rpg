@@ -4,9 +4,9 @@ $LOAD_PATH << File.expand_path('lib')
 
 require 'game'
 
-Enemies.load_all
+Game.load_all
 H = Hero.new('Alderan')
-E = Enemies.all.spawn('Wabbit')
+E = Game.enemies['Wabbit'].spawn()
 G = Game.new
 
 class <<self

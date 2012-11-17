@@ -19,7 +19,7 @@ module Scenes
                    's' => :move_down,
                    'd' => :move_down,
                    ' ' => :choose,
-                   'q' => :quit
+                   'q' => :exit
     end
 
     def choose

@@ -8,4 +8,8 @@ class Item
     @description  = description
     @action       = nil
   end
+
+  def size
+    1
+  end
 end

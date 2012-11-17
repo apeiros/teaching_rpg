@@ -9,6 +9,7 @@ class Screen
   ResetCursor   = "\e[1;1H"
   ResetColor    = "\e[0m"
   CursorToDebug = "\e[41;1H"
+  WhiteScreen   = "\e[2J\e[1;1H\e[48;5;231m#{(' '*120+"\n")*40}\e[0m\e[1;1H"
 
   Black   = 16
   White   = 231

@@ -2,99 +2,154 @@
 
 require 'set'
 require 'yaml'
+require 'point'
+require 'rectangle'
 
 class Map
-  Position = Struct.new(:x, :y) do
-    def moved(by_x, by_y)
-      Position.new(x+by_x, y+by_y)
+  Parse   = {}
+  Render  = {}
+
+  def self.tile(name, map_char, fg, bg, bold, render_char)
+    Parse[map_char.ord] = name
+    Render[name]        = ["\e[38;5;#{fg};48;5;#{bg}#{bold ? ';1' : ''}m%s", render_char]
+  end
+  def self.tiles(definition)
+    definition.each do |name, values|
+      tile(name, *values)
     end
   end
 
-  Water       = ["\e[38;5;18;48;5;27m%s\e[0m",    ' '] # ≈
-  Grass       = ["\e[38;5;149;48;5;118m%s\e[0m",  ' '] # ∴
-  Forrest     = ["\e[38;5;100;48;5;28m%s\e[0m",   ' '] # ∴
-  StoneWall   = ["\e[38;5;236;48;5;241m%s\e[0m",  ' '] # ∴
-  StoneFloor  = ["\e[38;5;248;48;5;253m%s\e[0m",  ' '] # ⁙
-  WoodFloor   = ["\e[38;5;248;48;5;214m%s\e[0m",  ' '] # |, =
-  Player      = ["\e[38;5;124;48;5;124m%s\e[0m",  ' ']
+  tiles(
+    forrest:      ['x', 100,  28,   false, ' '], # ∴
+    grass:        ['.', 149,  118,  false, ' '], # ∴
+    track:        ['|', 142,  142,  false, ' '], # ∴
+    stone_wall:   ['#', 236,  241,  false, ' '], # ⁙
+    stone_floor:  [' ', 248,  253,  false, ' '], # | =
+    wood_floor:   ['=', 248,  214,  false, ' '], # ∴
+    water:        ['~',  18,   27,  false, ' '], # ≈
+    roof:         ['A',  88,  124,  false, 'A'],
+    house:        ['H',  16,  172,  false, ' '],
+    door:         ['?',  16,   16,  false, ' '],
 
-  Parse = {
-    'x'.ord => :forrest,
-    '.'.ord => :grass,
-    '='.ord => :wood_floor,
-    '#'.ord => :stone_wall,
-    ' '.ord => :stone_floor,
-    '~'.ord => :water,
-  }
-  Render = {
-    forrest:      Forrest,
-    grass:        Grass,
-    stone_wall:   StoneWall,
-    stone_floor:  StoneFloor,
-    wood_floor:   WoodFloor,
-    water:        Water,
-    player:       Player # 253
-  }
-  Walkable = [:wood_floor, :grass, :stone_floor].to_set
+    player:       ['P', 124,  124,  false, ' '], # 253
+    boss:         ['B', 196,   16,  true,  '?'],
+  )
+  Walkable = [:wood_floor, :grass, :stone_floor, :door, :track].to_set
 
-  def self.read_file(file)
-    lines       = File.readlines(file+'.txt')
-    meta        = YAML.load_file(file+'.yaml')
-    new(lines.map { |line|
+  def self.read_file(game, file)
+    name  = File.basename(file)
+    lines = File.readlines(file+'.txt')
+    meta  = YAML.load_file(file+'.yaml')
+    tiles = lines.map { |line|
       line.chomp.unpack("C*").map { |chr|
         Parse[chr] || raise("Unknown char: #{chr.inspect}")
       }
-    }, meta)
+    }
+    new(game, name, tiles, meta)
   end
 
-  attr_reader :tiles, :height, :width, :player_position, :enemies, :enemy_probability, :meta
-  attr_accessor :screen_width, :screen_height, :clipping_x, :clipping_y
+  attr_reader   :tiles, :height, :width, :player, :enemies, :enemy_probability, :meta
+  attr_accessor :screen_width, :screen_height, :clipping, :name
+  attr_reader   :connections
 
-  def initialize(tiles, meta)
-    @tiles                    = tiles
-    @meta                     = meta
-    @player_position          = Position.new(*meta['start_position'])
-    @width, @height           = @tiles.first.size, @tiles.size
+  def initialize(game, name, tiles, meta)
+    @game               = game
+    @name               = name
+    @tiles              = tiles
+    @meta               = meta
+    @player             = Point.new(*meta['start_position'])
+    @width              = @tiles.first.size
+    @height             = @tiles.size
+    @size               = Rectangle.new(0, 0, @width, @height)
+    @enemy_probability  = meta['enemy_probability']
+    @enemies            = meta['enemies']
+    @screen_width       = 120
+    @screen_height      = 38
+    @points_of_interest = meta['points_of_interest']
+    @connections        = {}
+    @points_of_interest.each do |(x,y),(type, *args)|
+      if type == 'connection'
+        @connections[args] = [x,y]
+      end
+    end
+    auto_clip
+
     raise "Invalid map" unless @tiles.all? { |row| row.size == @width }
-    @enemy_probability        = meta['enemy_probability']
-    @enemies                  = meta['enemies']
-    @screen_width             = 120
-    @screen_height            = 38
-    @clipping_x, @clipping_y  = meta['start_clipping']
   end
 
-  def set_screen_clipping(x, y)
-    @clipping_x, @clipping_y = x, y
+  def point_of_interest?(position=@player)
+    !!point_of_interest(position)
+  end
+
+  def point_of_interest(position=@player)
+    poi = @points_of_interest[position.to_a]
+    if poi && poi[0] == 'boss'
+      poi = nil if @game.defeated?(@name, position)
+    end
+
+    poi
+  end
+
+  def move_to_connection(map_name, connection_number)
+    @player = Point.new(*@connections[[map_name, connection_number]])
+    auto_clip
+  end
+
+  def auto_clip
+    x = @player.x - @screen_width/2
+    y = @player.y - @screen_height/2
+    x = 0 if x < 0
+    y = 0 if y < 0
+    x = @width-@screen_width    if x > @width-@screen_width
+    y = @height-@screen_height  if y > @height-@screen_height
+
+    set_clipping(x, y)
+  end
+
+  def set_clipping(x, y)
+    @clipping = Rectangle.new(x, y, @screen_width, @screen_height)
   end
 
   def relative_position
-    Position.new(@player_position.x-@clipping_x, @player_position.y-@clipping_y)
+    @player.relative_to(@clipping)
   end
 
   def move_up
-    @player_position.y -= 1 if @player_position.y > 0 && valid_position?(@player_position.x, @player_position.y-1)
+    moved = @player.up
+    @player = moved if valid_position?(moved)
   end
   def move_down
-    @player_position.y += 1 if @player_position.y < @height-1 && valid_position?(@player_position.x, @player_position.y+1)
+    moved = @player.down
+    @player = moved if valid_position?(moved)
   end
   def move_left
-    @player_position.x -= 1 if @player_position.x > 0 && valid_position?(@player_position.x-1, @player_position.y)
+    moved = @player.left
+    @player = moved if valid_position?(moved)
   end
   def move_right
-    @player_position.x += 1 if @player_position.x < @width-1 && valid_position?(@player_position.x+1, @player_position.y)
+    moved = @player.right
+    @player = moved if valid_position?(moved)
   end
 
-  def valid_position?(x, y)
-    Walkable.include?(@tiles[y][x])
+  def valid_position?(point)
+    point.within?(@size) && Walkable.include?(@tiles[point.y][point.x])
   end
 
   def rendered_slice
-    @clipping_y.upto(@clipping_y+@screen_height-1).map { |y|
+    @clipping.each_y.map { |y|
       row = @tiles.at(y)
-      @clipping_x.upto(@clipping_x+@screen_width-1).map { |x|
+      @clipping.each_x.map { |x|
+        poi  = point_of_interest([x,y])
         cell = row.at(x)
-        cell = :player if (x == @player_position.x && y == @player_position.y)
-        format, char = Render[cell]
+
+        if @player.at?(x, y)
+          format, char = Render[:player]
+        elsif poi && poi[0] == 'boss'
+          format, char = Render[:boss]
+        else
+          format, char = Render[cell]
+        end
+
         format % char
       }.join
     }.join("\n")

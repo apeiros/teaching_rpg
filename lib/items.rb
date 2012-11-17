@@ -6,8 +6,13 @@ require 'items/healingitem'
 class Items
   include Enumerable
 
-  def initialize(contents={})
+  def initialize(size, contents={})
     @contents = Hash.new(0).merge(contents)
+    @size     = size
+    @used     = 0
+    @contents.each do |item, count|
+      @used += item.size*count
+    end
   end
 
   def add(item, count=1)

@@ -18,7 +18,7 @@ module Scenes
     end
 
     def from_title_to_map
-      map_scene = Scenes::Map.run(@game, 1)
+      map_scene = Scenes::Map.run(@game, 'village_01')
       if @game.hero.dead?
         Scenes::Defeat.run(@game)
       elsif map_scene.victory?

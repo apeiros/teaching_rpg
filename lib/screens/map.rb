@@ -18,18 +18,18 @@ module Screens
     end
 
     def scroll_x(new_clipping_x, duration)
-      interval = duration.fdiv((@map.clipping_x-new_clipping_x).abs)
-      @map.clipping_x.send(new_clipping_x < @map.clipping_x ? :downto : :upto, new_clipping_x) do |x|
-        @map.clipping_x = x
+      interval = duration.fdiv((@map.clipping.x-new_clipping_x).abs)
+      @map.clipping.x.send(new_clipping_x < @map.clipping.x ? :downto : :upto, new_clipping_x) do |x|
+        @map.set_clipping(x, @map.clipping.y)
         draw
         sleep interval
       end
     end
 
     def scroll_y(new_clipping_y, duration)
-      interval = duration.fdiv((@map.clipping_y-new_clipping_y).abs)
-      @map.clipping_y.send(new_clipping_y < @map.clipping_y ? :downto : :upto, new_clipping_y) do |y|
-        @map.clipping_y = y
+      interval = duration.fdiv((@map.clipping.y-new_clipping_y).abs)
+      @map.clipping.y.send(new_clipping_y < @map.clipping.y ? :downto : :upto, new_clipping_y) do |y|
+        @map.set_clipping(@map.clipping.x, y)
         draw
         sleep interval
       end
