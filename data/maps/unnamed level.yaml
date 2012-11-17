@@ -1,0 +1,8 @@
+--- 
+start_position: [0, 0]
+start_clipping: [0, 0] # auto
+enemy_probability: 0.05
+enemies:
+  Wabbit:           25
+  Decaying Corpse:  15
+points_of_interest: []
