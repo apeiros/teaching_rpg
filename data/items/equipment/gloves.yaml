@@ -1,0 +1,16 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  gloves
+items:
+  Wool Gloves:
+    armor: 1
+  Leather Gloves:
+    armor: 2
+  Bronce Plated Gloves:
+    armor: 3
+  Steel Plated Gloves:
+    armor: 4
+  Titan Armored Gloves:
+    armor: 5
+  Diamond Armored Gloves:
+    armor: 6

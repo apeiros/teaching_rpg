@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-require 'items'
 require 'loot'
+require 'luggage'
 require 'inspector'
 
 # Our hero actors are represented by this class
@@ -9,8 +9,8 @@ class Hero
   include Inspector
 
   attr_accessor :helmet, :gloves, :breastplate, :trousers, :boots, :shield
-  attr_accessor :sword, :blocking, :gold
-  attr_reader :name, :health_points, :magic_points, :level, :experience, :backpack
+  attr_accessor :weapon, :blocking, :gold
+  attr_reader   :name, :health_points, :magic_points, :level, :experience, :backpack
 
   def initialize(name)
     @name               = name
@@ -20,19 +20,22 @@ class Hero
     @health_points      = 100   # every hero starts with 100 health points
     @max_magic_points   = 0
     @magic_points       = 0
-    @sword              = 10    # attack
-    @helmet             = 0     # initial armor equipment is 0
-    @gloves             = 0
-    @breastplate        = 0
-    @trousers           = 0
-    @boots              = 0
-    @shield             = 1
+
+    @weapon             = 10
+
+    @headgear           = nil
+    @gloves             = nil
+    @shield             = nil
+    @breastplate        = nil
+    @trousers           = nil
+    @boots              = nil
+
     @gold               = 100
     @blocking           = false
-    @backpack           = Items.new(
+    @backpack           = Luggage.new(
       100,
-      Items::HealingItem.new('Apple',   20) => 10,
-      Items::HealingItem.new('Potion', 100) =>  2
+      Game.items['Apple']   => 10,
+      Game.items['Potion']  =>  2
     )
   end
 
@@ -41,9 +44,9 @@ class Hero
     @experience += looted.experience
     @gold       += looted.gold
     if @experience > 1000
-      @experience -= 1000
-      @level      += 1
-      @max_health_points += @level*10
+      @experience         -= 1000
+      @level              += 1
+      @max_health_points  += @level*10
       regenerate
     end
 
@@ -75,7 +78,7 @@ class Hero
   end
 
   def attack
-    @sword
+    @weapon
   end
 
   def alive?
@@ -86,7 +89,7 @@ class Hero
   end
 
   def armor
-    @helmet+@gloves+@breastplate+@trousers+@boots+@shield
+    [@helmet, @gloves, @breastplate, @trousers, @boots, @shield].compact.map(&:armor).inject(0, :+)
   end
 
   def to_s

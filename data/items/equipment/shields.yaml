@@ -1,0 +1,16 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  shield
+items:
+  Wooden Shield:
+    armor: 2
+  Tin Shield:
+    armor: 4
+  Bronce Shield:
+    armor: 6
+  Steel Shield:
+    armor: 8
+  Titan Guardian:
+    armor: 10
+  Diamond Sentinel:
+    armor: 12

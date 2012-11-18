@@ -1,0 +1,16 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  breastplate
+items:
+  Wool Shirt:
+    armor: 1
+  Leather Pourpoint:
+    armor: 2
+  Bronce Chainmail:
+    armor: 3
+  Steel Breastplate:
+    armor: 4
+  Titan Cuirass:
+    armor: 5
+  Diamond Armor:
+    armor: 6

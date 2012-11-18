@@ -1,0 +1,16 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  boots
+items:
+  Sandals:
+    armor: 1
+  Leather Boots:
+    armor: 2
+  Bronce Plated Boots:
+    armor: 3
+  Steel Plated Boots:
+    armor: 4
+  Titan Armored Boots:
+    armor: 5
+  Diamond Armored Boots:
+    armor: 6

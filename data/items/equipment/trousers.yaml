@@ -1,0 +1,16 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  trousers
+items:
+  Wool Trousers:
+    armor: 1
+  Leather Trousers:
+    armor: 2
+  Bronce Plated Trousers:
+    armor: 3
+  Steel Plated Trousers:
+    armor: 4
+  Titan Armored Trousers:
+    armor: 5
+  Diamond Armored Trousers:
+    armor: 6

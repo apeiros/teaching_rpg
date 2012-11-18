@@ -1,0 +1,17 @@
+defaults:
+  class: Items::DefensiveGear
+  type:  helmet
+items:
+  Wool Cap:
+    armor: 1
+  Leather Hat:
+    armor: 2
+  Bronce Helmet:
+    armor: 3
+  Iron Helmet:
+    armor: 4
+  Titan Helmet:
+    armor: 5
+  Diamond Helmet:
+    armor: 6
+

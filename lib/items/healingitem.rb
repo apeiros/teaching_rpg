@@ -2,11 +2,10 @@
 
 require 'item'
 
-class Items
+module Items
   class HealingItem < Item
-    def initialize(name, amount)
-      super(name, "Heals #{amount} health points")
-      @amount = amount
+    def initialize(name, attributes)
+      super(name, attributes.merge(description: "Heals %{amount} health points"))
     end
 
     def apply(entity)

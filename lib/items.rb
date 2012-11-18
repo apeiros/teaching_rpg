@@ -1,46 +1,22 @@
 # encoding: utf-8
 
-require 'item'
+require 'items/defensivegear'
 require 'items/healingitem'
 
-class Items
-  include Enumerable
+module Items
+  def self.load_all
+    items = {}
 
-  def initialize(size, contents={})
-    @contents = Hash.new(0).merge(contents)
-    @size     = size
-    @used     = 0
-    @contents.each do |item, count|
-      @used += item.size*count
+    Dir.glob('data/items/**/*.yaml') do |file|
+      data      = YAML.load_file(file)
+      defaults  = data['defaults']
+      data['items'].each do |name, attributes|
+        attributes  = defaults.merge(attributes)
+        klass       = Object.deep_const_get(attributes.delete('class'))
+        items[name] = klass.new(name, attributes)
+      end
     end
-  end
 
-  def add(item, count=1)
-    @contents[item] += count
-  end
-
-  def remove(item, count=1)
-    assert_has(item, count)
-    @contents[item] -= 1
-  end
-
-  def order(property, direction=:asc)
-    @contents.replace(@contents.sort_by { |k,v|
-      v.__send__(property)
-    })
-  end
-
-  def each(&block)
-    @contents.each(&block)
-  end
-
-  def size
-    @contents.size
-  end
-
-private
-
-  def assert_has(item, count)
-    raise "Not enough #{item} available" if @contents[item] < count
+    items
   end
 end

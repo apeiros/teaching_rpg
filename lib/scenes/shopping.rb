@@ -5,11 +5,10 @@ require 'scenes'
 
 module Scenes
   class Shopping < Scene
-    ShopItem = Struct.new(:type, :name, :quantity, :price, :desc)
-
-    def initialize(game, items = [ShopItem.new('Use', 'Apple', 20, 5, 'A pretty green apple'), ShopItem.new('Helmet', 'Wool Cap', 1, 200, 'This is desc of wool cap') ] )
+    def initialize(game, shop)
       super(game)
-      @screen = Screens::Shop.new(@game.hero, items )
+      @shop   = shop
+      @screen = Screens::Shop.new(@game.hero, @shop)
     end
 
     def main

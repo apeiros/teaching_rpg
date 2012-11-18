@@ -15,6 +15,16 @@ class Enemy
     gold
   ].to_set
 
+  def self.load_all
+    enemies = {}
+    Dir.glob('data/enemies/**/*.yaml') do |file|
+      enemy = Enemy.from_file(file)
+      enemies[enemy.name] = enemy
+    end
+
+    enemies
+  end
+
   def self.range_attr_reader(*names)
     names.each do |name|
       class_eval <<-EOC
@@ -39,7 +49,17 @@ class Enemy
   end
 
   def initialize(description)
-    extract_ivars(description)
+    extract_ivars(description.map { |name, value|
+      if RangeAttributes.include?(name) || RangeSpawnAttributes.include?(name)
+        if value.is_a?(Array)
+          value = value[0]..value[1]
+        else
+          value = value..value
+        end
+      end
+
+      [name, value]
+    })
   end
 
   def alive?
@@ -76,20 +96,6 @@ class Enemy
     RangeSpawnAttributes.each do |name|
       ivar = :"@#{name}"
       instance_variable_set(ivar, rand(instance_variable_get(ivar)))
-    end
-  end
-
-private
-  def extract_ivars(hash)
-    hash.each do |name, value|
-      if RangeAttributes.include?(name) || RangeSpawnAttributes.include?(name)
-        if value.is_a?(Array)
-          value = value[0]..value[1]
-        else
-          value = value..value
-        end
-      end
-      instance_variable_set(:"@#{name}", value)
     end
   end
 end

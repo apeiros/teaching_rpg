@@ -1,15 +1,15 @@
 # encoding: utf-8
 
 class Item
-  attr_reader :name, :description, :action
+  attr_reader :name, :description, :action, :size
 
-  def initialize(name, description)
+  def initialize(name, attributes)
+    attributes    = Hash[attributes.map { |k,v| [k.to_sym, v] }]
+
     @name         = name
-    @description  = description
     @action       = nil
-  end
-
-  def size
-    1
+    @description  = attributes[:description] ? (attributes[:description] % attributes) : name
+    @size         = 1
+    extract_ivars(attributes)
   end
 end

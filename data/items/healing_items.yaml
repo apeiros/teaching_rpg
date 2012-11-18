@@ -1,4 +1,7 @@
-default_class: 'HealingItems'
+defaults:
+  class: Items::HealingItem
 items:
-  Apple:  20
-  Potion: 100
+  Apple:
+    amount: 20
+  Potion:
+    amount: 100

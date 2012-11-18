@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require 'core_patches'
 require 'map'
 require 'hero'
 require 'scenes'
@@ -7,14 +8,14 @@ require 'screens'
 require 'enemy'
 require 'inn'
 require 'shop'
-require 'item'
+require 'items'
 
 
 # handles global game state
 class Game
   class <<self
     attr_accessor :rows, :columns
-    attr_reader :inns, :enemies, :shops, :items
+    attr_reader   :inns, :enemies, :shops, :items
   end
 
   @items    = {}
@@ -27,22 +28,10 @@ class Game
   end
 
   def self.load_all
-    @items    = {}
-    @shops    = {}
-    @inns     = {}
-    @enemies  = {}
-
-    Dir.glob('data/enemies/**/*.yaml') do |file|
-      enemy = Enemy.from_file(file)
-      @enemies[enemy.name] = enemy
-    end
-    @inns = Hash[YAML.load_file('data/inns.yaml').map { |name, cost_per_night|
-      [name, Inn.new(cost_per_night)]
-    }]
-    Dir.glob('data/enemies/**/*.yaml') do |file|
-      shop = Shop.from_file(file)
-      @shops[shop.name] = shop
-    end
+    @items    = Items.load_all
+    @shops    = Shop.load_all
+    @inns     = Inn.load_all
+    @enemies  = Enemy.load_all
   end
 
   def self.run

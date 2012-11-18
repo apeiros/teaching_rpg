@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Point
   attr_reader :x, :y
 

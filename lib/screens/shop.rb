@@ -19,7 +19,7 @@ module Screens
     def move_down?
       @cursor+1 < @max_items && @items[@cursor+1]
     end
-    
+
     def highlighted_item
       @items[@cursor]
     end
@@ -38,7 +38,7 @@ module Screens
         buffer ljust("" , row_color(index))
       end
       if @items[@cursor]
-        buffer box(@items[@cursor].desc, padding: 1, height: 2, background: 220)
+        buffer box(@items[@cursor].description, padding: 1, height: 2, background: 220)
       else
         buffer box("", height: 2, background: 220)
       end
