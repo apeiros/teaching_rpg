@@ -8,7 +8,7 @@ class Item
 
     @name         = name
     @action       = nil
-    @description  = attributes[:description] ? (attributes[:description] % attributes) : name
+    @description  = attributes[:description] ? (attributes.delete(:description) % attributes) : name
     @size         = 1
     extract_ivars(attributes)
   end
