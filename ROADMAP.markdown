@@ -14,3 +14,10 @@ The roadmap in the order of importance:
 * More interesting fight mechanics
 * Better experience algorithm (level based)
 * Move from ASCII to Gosu
+
+
+More detailed
+-------------
+
+* Mechanics to craft/forge/modify items
+* Magic
