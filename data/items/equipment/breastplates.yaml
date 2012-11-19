@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  breastplate
+  class:        Items::DefensiveGear
+  type:         breastplate
+  display_type: Breastplate
 items:
   Wool Shirt:
     armor: 1

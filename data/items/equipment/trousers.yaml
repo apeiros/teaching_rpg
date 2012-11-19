@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  trousers
+  class:        Items::DefensiveGear
+  type:         trousers
+  display_type: Trousers
 items:
   Wool Trousers:
     armor: 1

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'shopitem'
+
 class Shop
   def self.load_all
     shops = {}
@@ -16,10 +18,12 @@ class Shop
     shop      = new(shop_name, YAML.load_file(path))
   end
 
-  attr_reader :name, :description
+  attr_reader :name, :items
 
   def initialize(name, description)
-    @name         = name
-    @description  = description
+    @name   = name
+    @items  = description['items'].map { |name, (amount, price)|
+      ShopItem.new(name, amount, price)
+    }
   end
 end

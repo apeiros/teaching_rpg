@@ -6,27 +6,36 @@ module Screens
   class Shop < Screen
     attr_accessor :cursor, :hero
 
-    Row = "\e[38;5;#{Black};48;5;%dm%5sx %-12s %-16s %5d$"
+    Row = "\e[38;5;#{Black};48;5;%dm%5sx %-14s %-24s %5d$"
 
-    def initialize(hero, items)
+    def initialize(hero, shop)
       @hero       = hero
-      @items      = items
+      @shop       = shop
+      @items      = shop.items
       @cursor     = 0
       @max_items  = 36
-    end
-
-    # returns whether the cursor can be moved down
-    def move_down?
-      @cursor+1 < @max_items && @items[@cursor+1]
     end
 
     def highlighted_item
       @items[@cursor]
     end
 
+    # returns whether the cursor can be moved down
+    def move_down?
+      @cursor+1 < @items.length
+    end
+
     # returns whether the cursor can be moved up
     def move_up?
       @cursor > 0
+    end
+
+    def move_down
+      @cursor += 1
+    end
+
+    def move_up
+      @cursor -= 1
     end
 
     def rendered
@@ -37,11 +46,7 @@ module Screens
       @items.size.upto(@max_items-1) do | index |
         buffer ljust("" , row_color(index))
       end
-      if @items[@cursor]
-        buffer box(@items[@cursor].description, padding: 1, height: 2, background: 220)
-      else
-        buffer box("", height: 2, background: 220)
-      end
+      buffer box(@items[@cursor].description, padding: 1, height: 2, background: 220)
       buffer help
     end
 

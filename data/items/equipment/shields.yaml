@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  shield
+  class:        Items::DefensiveGear
+  type:         shield
+  display_type: Shield
 items:
   Wooden Shield:
     armor: 2

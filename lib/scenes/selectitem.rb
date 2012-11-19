@@ -9,7 +9,7 @@ module Scenes
 
     def initialize(*)
       super
-      @screen = Screens::Items.new(@game.hero)
+      @screen = Screens::Items.new(@hero)
     end
 
     def main
@@ -22,22 +22,26 @@ module Scenes
     end
 
     def move_up
-      @screen.selected -= 1
-      @screen.selected = 0 if @screen.selected < 0
+      if @screen.move_up?
+        @screen.move_up
+      else
+        beep
+      end
     end
 
     def move_down
-      @screen.selected += 1
-      @screen.selected = @game.hero.backpack.size-1 if @screen.selected > @game.hero.backpack.size-1
+      if @screen.move_down?
+        @screen.move_down
+      else
+        beep
+      end
     end
 
     def use
-      item, amount = @game.hero.backpack.to_a[@screen.selected]
+      item = @hero.backpack[@screen.selected]
       @game.hero.backpack.remove(item)
       item.apply(@game.hero)
       @action = item.action
-
-      exit
     end
   end
 end

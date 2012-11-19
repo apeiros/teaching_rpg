@@ -98,8 +98,8 @@ module Scenes
       end
     end
 
-    def shop(*)
-      Scenes::Shopping.run(@game)
+    def shop(name)
+      Scenes::Shopping.run(@game, Game.shops[name])
     end
 
     def connection(level_name, connection)

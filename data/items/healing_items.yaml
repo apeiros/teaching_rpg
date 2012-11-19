@@ -1,5 +1,6 @@
 defaults:
-  class: Items::HealingItem
+  class:        Items::HealingItem
+  display_type: Consumable
 items:
   Apple:
     amount: 20

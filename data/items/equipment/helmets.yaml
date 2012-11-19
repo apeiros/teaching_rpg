@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  helmet
+  class:        Items::DefensiveGear
+  type:         helmet
+  display_type: Helmet
 items:
   Wool Cap:
     armor: 1

@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  gloves
+  class:        Items::DefensiveGear
+  type:         gloves
+  display_type: Gloves
 items:
   Wool Gloves:
     armor: 1

@@ -30,7 +30,7 @@ class Hero
     @trousers           = nil
     @boots              = nil
 
-    @gold               = 100
+    @gold               = 10000
     @blocking           = false
     @backpack           = Luggage.new(
       100,

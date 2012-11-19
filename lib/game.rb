@@ -84,6 +84,8 @@ class Game
   def setup_screen
     $stdin.noecho do
       hide_cursor do
+        $stdout.print Screen::ClearScreen
+        $stdout.flush
         yield
       end
     end

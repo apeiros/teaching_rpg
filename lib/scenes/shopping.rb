@@ -22,13 +22,10 @@ module Scenes
     end
 
     def choose
-      if @screen.hero.gold >= @screen.highlighted_item.price
-        @screen.hero.gold -= @screen.highlighted_item.price
-        @screen.hero.backpack.add(@screen.highlighted_item)
+      if @screen.highlighted_item.quantity > 0 && @screen.hero.gold >= @screen.highlighted_item.price
+        @screen.hero.gold                 -= @screen.highlighted_item.price
         @screen.highlighted_item.quantity -= 1
-        if @screen.highlighted_item.quantity <= 0
-          @screen.highlighted_item.delete
-        end
+        @screen.hero.backpack.add(@screen.highlighted_item.item)
       else
         beep
       end
@@ -36,7 +33,7 @@ module Scenes
 
     def move_up
       if @screen.move_up?
-        @screen.cursor -= 1
+        @screen.move_up
       else
         beep
       end
@@ -44,7 +41,7 @@ module Scenes
 
     def move_down
       if @screen.move_down?
-        @screen.cursor += 1
+        @screen.move_down
       else
         beep
       end

@@ -1,6 +1,7 @@
 defaults:
-  class: Items::DefensiveGear
-  type:  boots
+  class:        Items::DefensiveGear
+  type:         boots
+  display_type: Boots
 items:
   Sandals:
     armor: 1

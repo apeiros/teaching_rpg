@@ -13,8 +13,7 @@ module Items
     def apply(entity)
       old_item      = entity.send(@type)
       entity.send(:"#{@type}=", self)
-      entity.luggage.remove(self)
-      entity.luggage.add(old_item) if old_item
+      entity.backpack.add(old_item) if old_item
       @action = "Equipped #{entity.name} with #{@name}"
     end
   end

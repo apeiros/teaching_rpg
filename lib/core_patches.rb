@@ -22,3 +22,15 @@ private
     end
   end
 end
+
+module Kernel
+module_function
+  def debugi(obj)
+    $stdout.print(Screen::CursorToDebug+obj.inspect)
+    $stdout.flush
+  end
+
+  def log(obj)
+    File.write('log.txt', obj.inspect+"\n", mode: 'a')
+  end
+end
